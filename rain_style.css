@@ -64,6 +64,22 @@
 	white-space: nowrap;
 }
 
+/* 모바일 */
+@media (max-width: 768px) {
+	.rain-text {
+		bottom: 80px;
+	}
+	.rain-text-title {
+		font-size: 1.5rem;
+	}
+	.rain-text-number-row #rainNumber {
+		font-size: 3.6rem;
+	}
+	.rain-text-unit {
+		font-size: 1.5rem;
+	}
+}
+
 #rainCanvas {
 	display: block;
 	width: 100%;
