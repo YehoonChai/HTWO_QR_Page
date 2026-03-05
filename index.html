@@ -367,7 +367,7 @@
                 },
                 "move": {
                     "enable": true,
-                    "speed": _isMobile ? 1 : 4,
+                    "speed": _isMobile ? 1 : 2,
                     "direction": "top",
                     "random": false,
                     "straight": false,
@@ -384,11 +384,11 @@
                 "detect_on": "canvas",
                 "events": {
                     "onhover": {
-                        "enable": !_isMobile,
+                        "enable": false,
                         "mode": "repulse"
                     },
                     "onclick": {
-                        "enable": !_isMobile,
+                        "enable": false,
                         "mode": "repulse"
                     },
                     "resize": true
