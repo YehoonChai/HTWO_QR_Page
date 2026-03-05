@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>RainyFx</title>
+    <link rel="stylesheet" href="./rain_style.css">
+    <link rel="stylesheet" href="./seq_style.css">
+</head>
+
+<body>
+    <div class="page">
+        <div class="rain-zone" id="rainZone">
+            <canvas id="rainCanvas"></canvas>
+            <div class="rain-text">
+                <div class="rain-text-title">유럽 수소전기트럭<br>누적 주행거리</div>
+                <div class="rain-text-number-row">
+                    <span id="rainNumber">00,000,000</span><span class="rain-text-unit">km 도달</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 스크롤 시 아래에 나오는 시퀀스 섹션 -->
+    <section id="seq-section" class="seq-section">
+        <div class="canvas-container">
+            <canvas id="sequence-canvas"></canvas>
+            <div class="sequence-text1">
+                <h1>수소연료전지</h1>
+                <p>현대자동차그룹에서 개발하고 있는 <br /> PEM 수전해는 수소연료전지와 동일한 <br /> 고분자 전해질막을 사용합니다.</p>
+            </div>
+            <div class="sequence-text2">
+                <h1>높은기술연계성</h1>
+                <p>수소연료전지의 역반응으로 <br />수소를 생산하기에 <br />높은 기술 연계성을 자랑합니다. </p>
+            </div>
+            <div class="sequence-text3">
+                <h1>PEM 수전해</h1>
+                <p>높은 에너지 효율과 빠른 응답성을 갖춘 PEM 수전해 </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 이미지 시퀀싱 아래 버블(파티클) 섹션 -->
+    <section id="bubble-section" class="bubble-section">
+        <div id="particles-js"></div>
+    </section>
+
+    <style>
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            background-color: #f5f9ff;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 50% 50%;
+        }
+    </style>
+
+    <script src="./rain_raindrop-fx.js"></script>
+
+    <script>
+        const rainZone = document.getElementById("rainZone");
+        const canvas = document.getElementById("rainCanvas");
+        const rainNumberEl = document.getElementById("rainNumber");
+
+        function formatRainNumber(value) {
+            const padded = Math.floor(value).toString().padStart(8, "0");
+            return padded.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function animateRainNumber(el, from, to, duration) {
+            let startTime = null;
+
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const elapsed = timestamp - startTime;
+                const t = Math.min(elapsed / duration, 1);
+
+                // [핵심] easeOutExpo: 0에서 1로 갈수록 속도가 급격히 줄어듭니다.
+                // 마지막 2천만에 도달할 때 아주 쫀득하게 붙는 느낌을 줍니다.
+                const eased = t === 1 ? 1 : 1 - Math.pow(2, -27 * t);
+                const current = from + (to - from) * eased;
+
+                el.textContent = formatRainNumber(current);
+
+                if (t < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    // 마지막에 정확히 목표 숫자로 고정
+                    el.textContent = formatRainNumber(to);
+                }
+            }
+
+            requestAnimationFrame(step);
+        }
+
+        if (rainNumberEl) {
+            // 2.5초(2500)가 너무 빠르다면 3000 정도로 늘려보세요. 
+            // 감속 구간이 길어질수록 '느려지는 효과'가 더 잘 보입니다.
+            animateRainNumber(rainNumberEl, 0, 20000000, 4000);
+        }
+
+
+        function setCanvasSize() {
+            const w = rainZone.clientWidth;
+            const h = rainZone.clientHeight;
+            canvas.width = w;
+            canvas.height = h;
+            return { width: w, height: h };
+        }
+        setCanvasSize();
+        //물방울 설정 변경
+        const rain = new RaindropFX({
+            canvas: canvas,
+            background: "bg.jpg",
+            // 백그라운드 이미지 보이는 영역 이동
+            backgroundOffsetX: -1000,
+            // 아주 작은 미세 물방울만 처음부터 맺혀 있음 + 가끔 또르륵, 추가 생성 없음
+            spawnInterval: [0.1, 0.2],          // 가끔 또르륵 떨어지는 큰 방울
+            spawnLimit: 25,
+            dropletsPerSeconds: 0,          // 추가로 물방울 안 생김 (시작 시에만 미세 방울 있음)
+            dropletSize: [14, 19],          // 미세하지만 잘 보이게 (조금 더 크게)
+            mist: true,
+            // 뿌연 느낌 더 강하게
+            mistColor: [0.03, 0.035, 0.04, 1],  // 미스트 밝기/농도 up
+            mistTime: 13,     // 더 빨리/짙게 쌓이도록
+            mistBlurStep: 4,                   // 안개 블러 강도 up (기본 4)
+            backgroundBlurSteps: 1,            // 배경도 더 흐릿하게
+            evaporate: 2,
+            gravity: 1400,
+            // 큰 빗방울(주르륵) 최대 크기 제한
+            raindropMaxSize: 30,
+            // 미세 물방울 포함 전체 곡률(굴절·볼록함) 강하게
+            refractBase: 0.55,
+            refractScale: 0.82,
+            raindropLightBump: 1.6,
+        });
+
+        rain.start();
+
+        // ========== 커스텀 가능한 옵션 (아래처럼 start 후에 수정) ==========
+        // new RaindropFX({ canvas, background: "bg.jpg", spawnInterval: [0.05, 0.2], ... })
+        //
+        // [배경]
+        //   background          - 배경 이미지 URL 또는 이미지 데이터 (기본: "")
+        //   backgroundBlurSteps - 배경 블러 강도 (기본: 3)
+        //   backgroundWrapMode  - "clamp" | "mirror" | "repeat"
+        //
+        // [빗방울 생성]
+        //   spawnInterval      - 생성 간격(초) [최소, 최대] (기본: [0.1, 0.1])
+        //   spawnSize          - 빗방울 크기 [최소, 최대] 픽셀 (기본: [60, 100])
+        //   spawnLimit         - 동시에 존재하는 최대 빗방울 수 (기본: 2000)
+        //
+        // [물리/움직임]
+        //   gravity            - 중력 (기본: 2400)
+        //   slipRate           - 미끄러짐 (0~1) (기본: 0)
+        //   motionInterval     - 움직임 갱신 간격 [최소, 최대] 초 (기본: [0.1, 0.4])
+        //   colliderSize       - 충돌 판정 크기 (기본: 1)
+        //   velocitySpread     - 속도 분산 (기본: 0.3)
+        //   xShifting          - 좌우 흔들림 [최소, 최대] (기본: [0, 0.1])
+        //   evaporate          - 증발 속도 (기본: 10)
+        //
+        // [꼬리/물방울]
+        //   trailDropDensity   - 꼬리 물방울 밀도 (기본: 0.2)
+        //   trailDistance      - 꼬리 간격 [최소, 최대] (기본: [20, 30])
+        //   trailDropSize      - 꼬리 물방울 크기 [최소, 최대] (기본: [0.3, 0.5])
+        //   trailSpread        - 꼬리 퍼짐 (기본: 0.6)
+        //   initialSpread      - 초기 퍼짐 (기본: 0.5)
+        //   shrinkRate         - 수축률 (기본: 0.01)
+        //
+        // [안개/미스트]
+        //   mist               - 미스트 사용 여부 (기본: true)
+        //   mistColor          - [r, g, b, a] (기본: [0.01, 0.01, 0.01, 1])
+        //   mistBlurStep       - 미스트 블러 (기본: 4)
+        //   mistTime           - 미스트 시간 (기본: 10)
+        //
+        // [작은 물방울]
+        //   dropletsPerSeconds - 초당 작은 물방울 수 (기본: 500)
+        //   dropletSize        - [최소, 최대] (기본: [10, 30])
+        //
+        // [렌더링/굴절]
+        //   smoothRaindrop     - [최소, 최대] (기본: [0.96, 0.99])
+        //   refractBase        - 굴절 기본값 (기본: 0.4)
+        //   refractScale       - 굴절 스케일 (기본: 0.6)
+        //   raindropCompose    - "smoother" 등
+        //   raindropLightPos   - [x, y, z, w] (기본: [-1, 1, 2, 0])
+        //   raindropDiffuseLight - [r, g, b] (기본: [0.2, 0.2, 0.2])
+        //   raindropShadowOffset  - (기본: 0.8)
+        //   raindropEraserSize - [최소, 최대] (기본: [0.93, 1])
+        //   raindropSpecularLight, raindropSpecularShininess, raindropLightBump
+        // =============================================================================
+
+        // start() 이후 옵션 미세 조정 (필요시 여기서 변경)
+        // if (rain.renderer && rain.renderer.options) {
+        //     rain.renderer.options.dropletsPerSeconds = 2500;
+        // }
+
+        const resizeObserver = new ResizeObserver(() => {
+            const { width, height } = setCanvasSize();
+            if (width > 0 && height > 0 && rain.resize) {
+                try { rain.resize(width, height); } catch (e) { /* rain 리사이즈 중 null 접근 방지 */ }
+            }
+        });
+        resizeObserver.observe(rainZone);
+
+        window.addEventListener("resize", () => {
+            const { width, height } = setCanvasSize();
+            if (width > 0 && height > 0 && rain.resize) {
+                try { rain.resize(width, height); } catch (e) { /* rain 리사이즈 중 null 접근 방지 */ }
+            }
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Observer.min.js"></script>
+    <script>
+        // 스크롤 시 무조건 스냅 + 스냅 후 1초간 스크롤 잠금
+        (function () {
+            const SNAP_LOCK_MS = 700;
+            const SCROLL_END_MS = 80;
+            const sections = [
+                document.querySelector(".page"),
+                document.getElementById("seq-section"),
+                document.getElementById("bubble-section"),
+            ].filter(Boolean);
+
+            let sectionTops = [];
+            let scrollEndTimer = null;
+            let scrollLockUntil = 0;
+
+            function updateSectionTops() {
+                sectionTops = sections.map((el) => el.offsetTop);
+            }
+
+            function getNearestTop(scrollY) {
+                if (!sectionTops.length) return scrollY;
+                let nearest = sectionTops[0];
+                let minDist = Math.abs(scrollY - nearest);
+                for (let i = 1; i < sectionTops.length; i++) {
+                    const d = Math.abs(scrollY - sectionTops[i]);
+                    if (d < minDist) {
+                        minDist = d;
+                        nearest = sectionTops[i];
+                    }
+                }
+                return nearest;
+            }
+
+            function onScrollEnd() {
+                const y = window.scrollY ?? document.documentElement.scrollTop;
+                const nearest = getNearestTop(y);
+                const diff = Math.abs(nearest - y);
+                if (diff > 2) {
+                    window.scrollTo({ top: nearest, behavior: "smooth" });
+                }
+                scrollLockUntil = Date.now() + SNAP_LOCK_MS;
+            }
+
+            window.addEventListener(
+                "scroll",
+                function () {
+                    clearTimeout(scrollEndTimer);
+                    scrollEndTimer = setTimeout(onScrollEnd, SCROLL_END_MS);
+                },
+                { passive: true }
+            );
+
+            window.addEventListener(
+                "wheel",
+                function (e) {
+                    if (Date.now() < scrollLockUntil) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                },
+                { capture: true, passive: false }
+            );
+
+            var touchStartY = 0;
+            window.addEventListener(
+                "touchstart",
+                function (e) {
+                    touchStartY = e.touches[0].clientY;
+                },
+                { capture: true, passive: true }
+            );
+            window.addEventListener(
+                "touchmove",
+                function (e) {
+                    if (Date.now() < scrollLockUntil) {
+                        e.preventDefault();
+                    }
+                },
+                { capture: true, passive: false }
+            );
+
+            updateSectionTops();
+            window.addEventListener("resize", updateSectionTops);
+        })();
+    </script>
+    <script src="./seq_script.js"></script>
+
+
+    <!-- 버블(파티클) 섹션 -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 100,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#7ecdf4"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": { "nb_sides": 5 },
+                    "image": {
+                        "src": "img/github.svg",
+                        "width": 100,
+                        "height": 100
+                    }
+                },
+                "opacity": {
+                    "value": 0.4887893790798144,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 20,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": false,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 4,
+                    "direction": "top",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1261.3919460124243
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "repulse"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "repulse"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 400,
+                        "line_linked": { "opacity": 1 }
+                    },
+                    "bubble": {
+                        "distance": 155.67619351748337,
+                        "size": 99.7924317419765,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 250,
+                        "duration": 0.4
+                    },
+                    "push": { "particles_nb": 4 },
+                    "remove": { "particles_nb": 2 }
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
+</body>
+
+</html>
