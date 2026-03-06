@@ -35,7 +35,7 @@ html {
 /* 캔버스 로드 전 흐릿한 오버레이: WebGL 결과물(blur+어두운 mist)과 비슷하게 맞춰서
    캔버스 페이드인 시 시각적 차이를 최소화 */
 .rain-zone::before {
-	content: '';
+	content: "";
 	position: absolute;
 	inset: -8px;
 	background-image: url("bg.jpg");
