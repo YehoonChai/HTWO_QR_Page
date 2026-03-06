@@ -34,12 +34,12 @@ images[0].onload = () => {
 			snap: "frame",
 			ease: "none",
 			onUpdate: render,
-			duration: 0.1, // 구간의 길이(초) - 커스텀 가능
+			duration: 0.015, // 구간의 길이(초) - 커스텀 가능
 		})
 		// 1단계 텍스트 노출
 		.to(".sequence-text1", {
 			opacity: 1,
-			duration: 0.1, // 나타나는 시간(초)
+			duration: 0.05, // 나타나는 시간(초)
 		})
 		.addLabel("stage1") // stage1 구간 레이블(자동진행 or 직접 호출 시 활용)
 		// 1단계 텍스트 사라짐
@@ -53,7 +53,7 @@ images[0].onload = () => {
 			snap: "frame",
 			ease: "none",
 			onUpdate: render,
-			duration: 0.1,
+			duration: 0.03,
 		})
 		// 2단계 텍스트 노출
 		.to(".sequence-text2", {
@@ -72,12 +72,12 @@ images[0].onload = () => {
 			snap: "frame",
 			ease: "none",
 			onUpdate: render,
-			duration: 30, // (커스텀!) 길게 잡으면 천천히 진행
+			duration: 25, // (커스텀!) 길게 잡으면 천천히 진행
 		})
-		// 3단계 텍스트 부드럽게 노출
+		// 3단계 텍스트 부드럽게 노출 - 천천히 등장(느리게)
 		.to(".sequence-text3", {
 			opacity: 1,
-			duration: 1, // 부드러운 등장
+			duration: 3, // 기존 0.5에서 2초로 천천히 등장시킴
 			ease: "power2.out",
 		})
 		.addLabel("stage3"); // stage3 (필요시 레이블명 추가)
@@ -86,6 +86,7 @@ images[0].onload = () => {
 	const seqSection = document.getElementById("seq-section");
 	let seqSectionInView = false;
 	let prevSeqSectionInView = false;
+	let isStageAnimating = false;
 	const WHEEL_THRESH = 8; // 휠 민감도 (낮을수록 작은 스크롤에도 반응)
 	const TOUCH_THRESH = 18; // 터치 한 번에 한 단계씩
 	// 페이지2 도달 전: 일반 스크롤. 도달 후: 이미지 시퀀스.
@@ -107,7 +108,14 @@ images[0].onload = () => {
 		applySeqTouchAction();
 		// 2페이지에 막 도착했을 때 → 자동으로 33프레임(stage1)까지 진행
 		if (seqSectionInView && !prevSeqSectionInView && sequence.frame < 1) {
-			tl.tweenTo("stage1", { ease: "none", duration: 3.5 });
+			isStageAnimating = true;
+			tl.tweenTo("stage1", {
+				ease: "none",
+				duration: 3.5,
+				onComplete: () => {
+					isStageAnimating = false;
+				},
+			});
 		}
 	}
 
@@ -126,30 +134,45 @@ images[0].onload = () => {
 	}
 
 	function goToNextStage() {
-		if (gsap.isTweening(tl)) return;
+		if (isStageAnimating) return;
 		const next = tl.nextLabel();
 		if (!next) return;
 		const current = tl.currentLabel();
 		const duration = current === "stage2" && next === "stage3" ? 7 : 3.5;
+		isStageAnimating = true;
 		tl.tweenTo(next, {
 			ease: "none",
 			duration,
-			onComplete: next === "stage3" ? applySeqTouchAction : undefined,
+			onComplete: () => {
+				isStageAnimating = false;
+				if (next === "stage3") applySeqTouchAction();
+			},
 		});
 	}
 
 	function goToPrevStage() {
-		if (gsap.isTweening(tl)) return;
+		if (isStageAnimating) return;
 		const prev = tl.previousLabel();
 		if (prev) {
 			const current = tl.currentLabel();
 			const duration = current === "stage3" && prev === "stage2" ? 4 : 2;
-			tl.tweenTo(prev, { ease: "none", duration });
+			isStageAnimating = true;
+			tl.tweenTo(prev, {
+				ease: "none",
+				duration,
+				onComplete: () => {
+					isStageAnimating = false;
+				},
+			});
 		} else {
+			isStageAnimating = true;
 			tl.tweenTo(0, {
 				ease: "none",
 				duration: 2.5,
-				onComplete: applySeqTouchAction,
+				onComplete: () => {
+					isStageAnimating = false;
+					applySeqTouchAction();
+				},
 			});
 		}
 	}
