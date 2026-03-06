@@ -27,37 +27,60 @@ images[0].onload = () => {
 	// 1. 타임라인 생성 (자동 이동을 위해 paused: true)
 	const tl = gsap.timeline({ paused: true });
 
-	tl.to(sequence, {
-		frame: 33,
-		snap: "frame",
-		ease: "none",
-		onUpdate: render,
-		duration: 0.1,
-	})
-		.to(".sequence-text1", { opacity: 1, duration: 0.2 })
-		.addLabel("stage1")
-		.to({}, { duration: 0 })
-		.to(".sequence-text1", { opacity: 0, duration: 0.1 })
+	tl
+		// 1단계: 프레임 0~33까지 자연스럽게진행
+		.to(sequence, {
+			frame: 33, // 0~33 프레임까지
+			snap: "frame",
+			ease: "none",
+			onUpdate: render,
+			duration: 0.1, // 구간의 길이(초) - 커스텀 가능
+		})
+		// 1단계 텍스트 노출
+		.to(".sequence-text1", {
+			opacity: 1,
+			duration: 0.1, // 나타나는 시간(초)
+		})
+		.addLabel("stage1") // stage1 구간 레이블(자동진행 or 직접 호출 시 활용)
+		// 1단계 텍스트 사라짐
+		.to(".sequence-text1", {
+			opacity: 0,
+			duration: 0.03, // 사라지는 시간(초)
+		})
+		// 2단계: 프레임 33~56 이동
 		.to(sequence, {
 			frame: 56,
 			snap: "frame",
 			ease: "none",
 			onUpdate: render,
-			duration: 0.2,
+			duration: 0.1,
 		})
-		.to(".sequence-text2", { opacity: 1, duration: 0.2 })
-		.addLabel("stage2")
-		.to({}, { duration: 0 })
-		.to(".sequence-text2", { opacity: 0, duration: 0.2 })
+		// 2단계 텍스트 노출
+		.to(".sequence-text2", {
+			opacity: 1,
+			duration: 0.1,
+		})
+		.addLabel("stage2") // stage2 (커스텀시 이름 변경 가능)
+		// 2단계 텍스트 사라짐
+		.to(".sequence-text2", {
+			opacity: 0,
+			duration: 2,
+		})
+		// 3단계: 나머지 프레임(56~184)까지 긴 이동
 		.to(sequence, {
 			frame: 184,
 			snap: "frame",
 			ease: "none",
 			onUpdate: render,
-			duration: 30,
+			duration: 30, // (커스텀!) 길게 잡으면 천천히 진행
 		})
-		.to(".sequence-text3", { opacity: 1, duration: 1, ease: "power2.out" })
-		.addLabel("stage3");
+		// 3단계 텍스트 부드럽게 노출
+		.to(".sequence-text3", {
+			opacity: 1,
+			duration: 1, // 부드러운 등장
+			ease: "power2.out",
+		})
+		.addLabel("stage3"); // stage3 (필요시 레이블명 추가)
 
 	// 2. 2페이지가 뷰포트를 채울 때만 스크롤을 가로채서 시퀀스 제어. 그 외에는 일반 스크롤.
 	const seqSection = document.getElementById("seq-section");
