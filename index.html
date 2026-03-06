@@ -117,23 +117,46 @@
         }
 
         let rain;
+        let rainResizeObserver = null;
+        let rainSession = 0;
 
-        function initRain() {
+        function stopRain() {
+            rainSession += 1; // 진행 중인 start() 비동기 보호
+
+            rainZone.classList.remove('canvas-ready');
+            canvas.style.opacity = '0';
+
+            if (rainResizeObserver) {
+                try { rainResizeObserver.disconnect(); } catch (e) { }
+                rainResizeObserver = null;
+            }
+
+            if (rain) {
+                try { rain.destroy(); } catch (e) { }
+                rain = null;
+            }
+        }
+
+        function startRain() {
+            const session = (rainSession += 1);
+
+            // 이미 실행 중이면 재시작하지 않음
+            if (rain) return;
+
             setCanvasSize();
 
             // bg.jpg 로드 완료 후 캔버스 페이드인 + 블러 오버레이 동시 페이드아웃
-            // → 흐릿한 CSS 오버레이와 WebGL blur가 비슷해서 시각적 차이가 최소화됨
             canvas.style.opacity = '0';
             canvas.style.transition = 'opacity 1.2s ease-in';
+            rainZone.classList.remove('canvas-ready');
             const _bgPreload = new Image();
-            _bgPreload.onload = () => {
+            const onBgReady = () => {
+                if (session !== rainSession) return; // 중간에 stop/restart 되었으면 무시
                 canvas.style.opacity = '1';
                 rainZone.classList.add('canvas-ready');
             };
-            _bgPreload.onerror = () => {
-                canvas.style.opacity = '1';
-                rainZone.classList.add('canvas-ready');
-            };
+            _bgPreload.onload = onBgReady;
+            _bgPreload.onerror = onBgReady;
             _bgPreload.src = 'bg.jpg';
 
             rain = new RaindropFX({
@@ -156,7 +179,9 @@
                 refractScale: 0.82,
                 raindropLightBump: 1.6,
             });
-            rain.start();
+
+            // start()는 내부에서 텍스처 로딩/초기 미스트·방울을 채우는 과정이 있어 async
+            Promise.resolve(rain.start()).catch(() => { /* 로드 실패 시에도 CSS bg는 남음 */ });
 
             // ========== 커스텀 가능한 옵션 (아래처럼 start 후에 수정) ==========
             // new RaindropFX({ canvas, background: "bg.jpg", spawnInterval: [0.05, 0.2], ... })
@@ -217,17 +242,49 @@
 
 
 
-            const resizeObserver = new ResizeObserver(() => {
+            if (rainResizeObserver) {
+                try { rainResizeObserver.disconnect(); } catch (e) { }
+            }
+            rainResizeObserver = new ResizeObserver(() => {
                 const { width, height } = setCanvasSize();
                 if (width > 0 && height > 0 && rain && rain.resize) {
                     try { rain.resize(width, height); } catch (e) { }
                 }
             });
-            resizeObserver.observe(rainZone);
+            rainResizeObserver.observe(rainZone);
         }
 
+        // 페이지1을 이탈하면 효과를 끄고, 돌아오면 처음부터 다시 시작
+        (function setupRainVisibilityLifecycle() {
+            if (!rainZone) return;
+            let isActive = false;
+
+            const io = new IntersectionObserver(
+                (entries) => {
+                    const entry = entries[0];
+                    const ratio = entry ? entry.intersectionRatio : 0;
+                    // 히스테리시스: 들어올 때/나갈 때 기준을 다르게 해서 깜빡임 방지
+                    if (!isActive && ratio >= 0.6) {
+                        isActive = true;
+                        stopRain();
+                        startRain();
+                    } else if (isActive && ratio <= 0.15) {
+                        isActive = false;
+                        stopRain();
+                    }
+                },
+                { threshold: [0, 0.15, 0.6, 1] }
+            );
+            io.observe(rainZone);
+
+            window.addEventListener("pagehide", stopRain);
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) stopRain();
+            });
+        })();
+
         // load 이벤트 이후 초기화 → 모바일에서 layout 완성 후 canvas 크기 확보
-        window.addEventListener("load", initRain);
+        window.addEventListener("load", startRain);
 
         window.addEventListener("resize", () => {
             const { width, height } = setCanvasSize();
