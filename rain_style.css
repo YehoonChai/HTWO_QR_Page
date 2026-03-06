@@ -26,10 +26,11 @@
 	padding: 0;
 }
 
-html {
+html, body {
 	-webkit-text-size-adjust: 100%;
 	text-size-adjust: 100%;
 	font-family: "HyundaiSansTextPro", "Malgun Gothic", sans-serif;
+	overflow-x: hidden;
 }
 
 .page {
@@ -41,7 +42,7 @@ html {
 
 /* 중앙 비 오는 영역 컨테이너 */
 .rain-zone {
-	width: 100vw;
+	width: 100%;
 	height: 100vh;
 	overflow: hidden;
 	box-shadow:
