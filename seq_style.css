@@ -1,7 +1,5 @@
-/* 섹션 1,2,3 스크롤 스냅 */
+/* 섹션 1,2,3 레이아웃 (스냅은 JS에서만 제어) */
 html {
-	scroll-snap-type: y mandatory;
-	scroll-behavior: smooth;
 }
 body {
 	overflow-x: hidden;
@@ -9,8 +7,6 @@ body {
 .page,
 .seq-section,
 .bubble-section {
-	scroll-snap-align: start;
-	scroll-snap-stop: always;
 	height: 100vh;
 	min-height: 100vh;
 }

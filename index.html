@@ -241,10 +241,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Observer.min.js"></script>
     <script>
-        // 스크롤 시 무조건 스냅 + 스냅 후 1초간 스크롤 잠금
+        // 스크롤 시 무조건 섹션 단위로만 이동 (1→2→3, 3→2→1)
+        // 한 번의 휠/스와이프 제스처가 곧바로 "한 섹션" 이동이 되도록 JS에서만 제어
         (function () {
             const SNAP_LOCK_MS = 700;
-            const SCROLL_END_MS = 80;
             const sections = [
                 document.querySelector(".page"),
                 document.getElementById("seq-section"),
@@ -252,53 +252,56 @@
             ].filter(Boolean);
 
             let sectionTops = [];
-            let scrollEndTimer = null;
             let scrollLockUntil = 0;
+            const WHEEL_THRESH = 3; // 너무 미세한 휠은 무시
+            const TOUCH_THRESH = 10; // 터치 한 번에 한 섹션 이동 기준
 
             function updateSectionTops() {
                 sectionTops = sections.map((el) => el.offsetTop);
             }
 
-            function getNearestTop(scrollY) {
-                if (!sectionTops.length) return scrollY;
-                let nearest = sectionTops[0];
-                let minDist = Math.abs(scrollY - nearest);
-                for (let i = 1; i < sectionTops.length; i++) {
-                    const d = Math.abs(scrollY - sectionTops[i]);
-                    if (d < minDist) {
-                        minDist = d;
-                        nearest = sectionTops[i];
-                    }
-                }
-                return nearest;
-            }
-
-            function onScrollEnd() {
-                const y = window.scrollY ?? document.documentElement.scrollTop;
-                const nearest = getNearestTop(y);
-                const diff = Math.abs(nearest - y);
-                if (diff > 2) {
-                    window.scrollTo({ top: nearest, behavior: "smooth" });
-                }
-                scrollLockUntil = Date.now() + SNAP_LOCK_MS;
-            }
-
-            window.addEventListener(
-                "scroll",
-                function () {
-                    clearTimeout(scrollEndTimer);
-                    scrollEndTimer = setTimeout(onScrollEnd, SCROLL_END_MS);
-                },
-                { passive: true }
-            );
-
             window.addEventListener(
                 "wheel",
                 function (e) {
-                    if (Date.now() < scrollLockUntil) {
-                        e.preventDefault();
-                        e.stopPropagation();
+                    if (!sectionTops.length) return;
+                    const now = Date.now();
+                    const dy = e.deltaY || 0;
+                    if (Math.abs(dy) < WHEEL_THRESH) return; // 너무 미세한 입력은 무시
+
+                    const y = window.scrollY ?? document.documentElement.scrollTop;
+                    // 현재 스크롤 위치 기준으로 가장 가까운 섹션 인덱스 계산
+                    let nearestIndex = 0;
+                    let minDist = Math.abs(y - sectionTops[0]);
+                    for (let i = 1; i < sectionTops.length; i++) {
+                        const d = Math.abs(y - sectionTops[i]);
+                        if (d < minDist) {
+                            minDist = d;
+                            nearestIndex = i;
+                        }
                     }
+
+                    // 2페이지(시퀀스 구간)는 전용 스크립트가 휠을 처리하도록 양보
+                    if (nearestIndex === 1) return;
+
+                    // 브라우저 기본 스크롤 막고, 우리 로직으로만 섹션 이동
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (now < scrollLockUntil) return;
+
+                    let targetIndex = nearestIndex;
+                    if (dy > 0 && nearestIndex < sectionTops.length - 1) {
+                        targetIndex = nearestIndex + 1;
+                    } else if (dy < 0 && nearestIndex > 0) {
+                        targetIndex = nearestIndex - 1;
+                    } else {
+                        // 더 이상 이동할 섹션이 없으면 그대로
+                        return;
+                    }
+
+                    const targetTop = sectionTops[targetIndex];
+                    window.scrollTo({ top: targetTop, behavior: "smooth" });
+                    scrollLockUntil = now + SNAP_LOCK_MS;
                 },
                 { capture: true, passive: false }
             );
@@ -314,9 +317,45 @@
             window.addEventListener(
                 "touchmove",
                 function (e) {
-                    if (Date.now() < scrollLockUntil) {
-                        e.preventDefault();
+                    if (!sectionTops.length) return;
+                    const now = Date.now();
+                    const y = e.touches[0].clientY;
+                    const dy = touchStartY - y;
+
+                    if (Math.abs(dy) < TOUCH_THRESH) return; // 너무 미세한 스와이프는 무시
+
+                    const scrollY = window.scrollY ?? document.documentElement.scrollTop;
+                    let nearestIndex = 0;
+                    let minDist = Math.abs(scrollY - sectionTops[0]);
+                    for (let i = 1; i < sectionTops.length; i++) {
+                        const d = Math.abs(scrollY - sectionTops[i]);
+                        if (d < minDist) {
+                            minDist = d;
+                            nearestIndex = i;
+                        }
                     }
+
+                    // 2페이지(시퀀스 구간)는 전용 스크립트가 터치를 처리
+                    if (nearestIndex === 1) return;
+
+                    // 브라우저 기본 스크롤 막고, 우리 로직으로만 섹션 이동
+                    e.preventDefault();
+
+                    if (now < scrollLockUntil) return;
+
+                    let targetIndex = nearestIndex;
+                    if (dy > 0 && nearestIndex < sectionTops.length - 1) {
+                        targetIndex = nearestIndex + 1;
+                    } else if (dy < 0 && nearestIndex > 0) {
+                        targetIndex = nearestIndex - 1;
+                    } else {
+                        return;
+                    }
+
+                    const targetTop = sectionTops[targetIndex];
+                    window.scrollTo({ top: targetTop, behavior: "smooth" });
+                    scrollLockUntil = now + SNAP_LOCK_MS;
+                    touchStartY = y;
                 },
                 { capture: true, passive: false }
             );
