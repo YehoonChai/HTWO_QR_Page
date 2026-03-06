@@ -27,9 +27,29 @@ html {
 	position: relative;
 	flex-shrink: 0;
 	background-color: #1a2a3a;
-	background-image: url('bg.jpg');
+	background-image: url("bg.jpg");
 	background-size: cover;
 	background-position: center center;
+}
+
+/* 캔버스 로드 전 흐릿한 오버레이: WebGL 결과물(blur+어두운 mist)과 비슷하게 맞춰서
+   캔버스 페이드인 시 시각적 차이를 최소화 */
+.rain-zone::before {
+	content: '';
+	position: absolute;
+	inset: -8px;
+	background-image: url("bg.jpg");
+	background-size: cover;
+	background-position: center center;
+	filter: blur(4px) brightness(0.7);
+	z-index: 1;
+	pointer-events: none;
+	transition: opacity 1.2s ease;
+}
+
+/* 캔버스 준비 완료 → 오버레이 동시에 페이드아웃 */
+.rain-zone.canvas-ready::before {
+	opacity: 0;
 }
 
 .rain-text {
@@ -42,6 +62,7 @@ html {
 	box-sizing: border-box;
 	color: #ffffff;
 	text-align: left;
+	z-index: 2;
 }
 
 .rain-text-title {

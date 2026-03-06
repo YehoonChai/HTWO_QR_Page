@@ -121,14 +121,19 @@
         function initRain() {
             setCanvasSize();
 
-            // bg.jpg 로드 완료 후 캔버스 페이드인 (모바일에서 검정 깜빡임 방지)
+            // bg.jpg 로드 완료 후 캔버스 페이드인 + 블러 오버레이 동시 페이드아웃
+            // → 흐릿한 CSS 오버레이와 WebGL blur가 비슷해서 시각적 차이가 최소화됨
             canvas.style.opacity = '0';
-            canvas.style.transition = 'opacity 0.6s ease';
+            canvas.style.transition = 'opacity 1.2s ease-in';
             const _bgPreload = new Image();
             _bgPreload.onload = () => {
-                setTimeout(() => { canvas.style.opacity = '1'; }, 200);
+                canvas.style.opacity = '1';
+                rainZone.classList.add('canvas-ready');
             };
-            _bgPreload.onerror = () => { canvas.style.opacity = '1'; };
+            _bgPreload.onerror = () => {
+                canvas.style.opacity = '1';
+                rainZone.classList.add('canvas-ready');
+            };
             _bgPreload.src = 'bg.jpg';
 
             rain = new RaindropFX({
