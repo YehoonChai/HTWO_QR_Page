@@ -83,7 +83,7 @@ html {
 }
 
 .rain-text-number-row #rainNumber {
-	font-size: clamp(2.8rem, 7.5vw, 7rem);
+	font-size: clamp(3.15rem, 7.5vw, 7rem);
 	font-weight: 700;
 	letter-spacing: 0.02em;
 	line-height: 1.2;
@@ -92,7 +92,7 @@ html {
 }
 
 .rain-text-unit {
-	font-size: clamp(1.3rem, 3vw, 3.2rem);
+	font-size: clamp(1rem, 3vw, 3.2rem);
 	font-weight: 500;
 	letter-spacing: 0.03em;
 	white-space: nowrap;
