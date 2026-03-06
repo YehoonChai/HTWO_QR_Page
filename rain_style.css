@@ -26,7 +26,8 @@
 	padding: 0;
 }
 
-html, body {
+html,
+body {
 	-webkit-text-size-adjust: 100%;
 	text-size-adjust: 100%;
 	font-family: "HyundaiSansTextPro", "Malgun Gothic", sans-serif;
