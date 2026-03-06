@@ -120,6 +120,17 @@
 
         function initRain() {
             setCanvasSize();
+
+            // bg.jpg 로드 완료 후 캔버스 페이드인 (모바일에서 검정 깜빡임 방지)
+            canvas.style.opacity = '0';
+            canvas.style.transition = 'opacity 0.6s ease';
+            const _bgPreload = new Image();
+            _bgPreload.onload = () => {
+                setTimeout(() => { canvas.style.opacity = '1'; }, 200);
+            };
+            _bgPreload.onerror = () => { canvas.style.opacity = '1'; };
+            _bgPreload.src = 'bg.jpg';
+
             rain = new RaindropFX({
                 canvas: canvas,
                 background: "bg.jpg",
