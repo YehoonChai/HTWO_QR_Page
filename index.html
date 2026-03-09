@@ -301,7 +301,7 @@
         // 스크롤 시 무조건 섹션 단위로만 이동 (1→2→3, 3→2→1)
         // 한 번의 휠/스와이프 제스처가 곧바로 "한 섹션" 이동이 되도록 JS에서만 제어
         (function () {
-            const SNAP_LOCK_MS = 700;
+            const SNAP_LOCK_MS = 120;
             const sections = [
                 document.querySelector(".page"),
                 document.getElementById("seq-section"),
@@ -337,8 +337,11 @@
                         }
                     }
 
-                    // 2페이지(시퀀스 구간)는 전용 스크립트가 휠을 처리하도록 양보
-                    if (nearestIndex === 1) return;
+                    // 2페이지(시퀀스 구간)는 전용 스크립트가 휠 처리. 기본 스크롤만 막아서 페이지3로 넘어가는 것 방지
+                    if (nearestIndex === 1) {
+                        e.preventDefault();
+                        return;
+                    }
 
                     // 브라우저 기본 스크롤 막고, 우리 로직으로만 섹션 이동
                     e.preventDefault();
@@ -362,6 +365,25 @@
                 },
                 { capture: true, passive: false }
             );
+
+            // 스크롤이 끝난 뒤 가장 가까운 섹션에 스냅 (3→2 smooth 후 과하게 올라가는 것 보정)
+            window.addEventListener("scrollend", function () {
+                if (!sectionTops.length) return;
+                updateSectionTops();
+                const y = window.scrollY ?? document.documentElement.scrollTop;
+                let nearestIndex = 0;
+                let minDist = Math.abs(y - sectionTops[0]);
+                for (let i = 1; i < sectionTops.length; i++) {
+                    const d = Math.abs(y - sectionTops[i]);
+                    if (d < minDist) {
+                        minDist = d;
+                        nearestIndex = i;
+                    }
+                }
+                if (minDist > 20) {
+                    window.scrollTo({ top: sectionTops[nearestIndex], behavior: "auto" });
+                }
+            });
 
             var touchStartY = 0;
             window.addEventListener(
@@ -392,8 +414,11 @@
                         }
                     }
 
-                    // 2페이지(시퀀스 구간)는 전용 스크립트가 터치를 처리
-                    if (nearestIndex === 1) return;
+                    // 2페이지(시퀀스 구간)는 전용 스크립트가 터치 처리. 기본 스크롤만 막아서 페이지3로 넘어가는 것 방지
+                    if (nearestIndex === 1) {
+                        e.preventDefault();
+                        return;
+                    }
 
                     // 브라우저 기본 스크롤 막고, 우리 로직으로만 섹션 이동
                     e.preventDefault();
