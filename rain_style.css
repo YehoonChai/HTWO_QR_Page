@@ -62,14 +62,14 @@ body {
 .rain-zone::before {
 	content: "";
 	position: absolute;
-	inset: -8px;
+	inset: -6px;
 	background-image: url("bg.jpg");
 	background-size: cover;
 	background-position: center center;
-	filter: blur(3px) brightness(0.7);
+	filter: blur(2px) brightness(0.9);
 	z-index: 1;
 	pointer-events: none;
-	transition: opacity 1.2s ease;
+	transition: opacity 1.8s ease;
 }
 
 /* 캔버스 준비 완료 → 오버레이 동시에 페이드아웃 */
