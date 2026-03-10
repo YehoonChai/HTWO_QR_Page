@@ -335,7 +335,9 @@
         // 스크롤 시 무조건 섹션 단위로만 이동 (1→2→3, 3→2→1)
         // 한 번의 휠/스와이프 제스처가 곧바로 "한 섹션" 이동이 되도록 JS에서만 제어
         (function () {
-            const SNAP_LOCK_MS = 120;
+            // 한 번 휠/스와이프할 때 "무조건 한 페이지만" 이동하도록
+            // 다음 입력을 꽤 길게 잠그는 잠금 시간(ms)
+            const SNAP_LOCK_MS = 500;
             const sections = [
                 document.querySelector(".page"),
                 document.getElementById("seq-section"),
