@@ -1,8 +1,9 @@
 /* 섹션 1,2,3 레이아웃
-   스크롤 스냅은 너무 강하게 걸면 3→1로 튀는 현상이 생겨서 제거하고,
-   페이지 전환 제어는 JS(seq_script.js) 쪽에서만 처리 */
+   - 각 페이지를 화면보다 약간 길게 만들어 아래/위에 여유 공간을 두고
+   - 스크롤이 멈출 때는 각 페이지의 '중앙'이 뷰포트 중앙에 오도록 스냅 */
 html {
 	scroll-behavior: smooth;
+	scroll-snap-type: y proximity;
 }
 body {
 	overflow-x: hidden;
@@ -12,6 +13,17 @@ body {
 .bubble-section {
 	height: calc(var(--vh, 1vh) * 100);
 	min-height: calc(var(--vh, 1vh) * 100);
+}
+
+/* 페이지1(비 영역)과 페이지3(버블 영역)은
+   - 높이를 살짝 더 길게(패딩) 주고
+   - 중앙 기준으로 스냅되게 해서
+   - 다음/이전 페이지가 아래에 삐져나오지 않도록 처리 */
+.page,
+.bubble-section {
+	/* padding-bottom: 12vh; */
+	scroll-snap-align: center;
+	scroll-snap-stop: always;
 }
 
 .bubble-section {
