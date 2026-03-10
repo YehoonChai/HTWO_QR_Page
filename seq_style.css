@@ -1,9 +1,9 @@
 /* 섹션 1,2,3 레이아웃
-   - 각 페이지 높이는 뷰포트와 동일하게 맞추고
-   - 스크롤이 멈출 때 각 페이지의 '시작(top)'이 화면 상단에 딱 맞게 스냅 */
+   - 각 페이지 높이는 뷰포트와 동일
+   - CSS 스크롤 스냅은 모바일 관성 스크롤에서 3→1 점프를 유발해 비활성화
+   - 페이지 전환(1↔2↔3)은 JS(seq_script.js)에서만 제어 */
 html {
 	scroll-behavior: smooth;
-	scroll-snap-type: y proximity;
 }
 body {
 	overflow-x: hidden;
@@ -13,8 +13,6 @@ body {
 .bubble-section {
 	height: calc(var(--vh, 1vh) * 100);
 	min-height: calc(var(--vh, 1vh) * 100);
-	scroll-snap-align: start;
-	scroll-snap-stop: always;
 }
 
 .bubble-section {
