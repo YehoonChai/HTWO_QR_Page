@@ -351,10 +351,35 @@ images[0].onload = () => {
 		return sequence.frame >= frameCount - 1;
 	}
 
+	// 페이지3(버블 섹션)이 화면 대부분을 채우고 있는지
+	function isBubbleSectionInView() {
+		const bubble = document.getElementById("bubble-section");
+		if (!bubble) return false;
+		const r = bubble.getBoundingClientRect();
+		const H = window.innerHeight;
+		const visibleTop = Math.max(0, r.top);
+		const visibleBottom = Math.min(H, r.bottom);
+		const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+		return H > 0 && visibleHeight / H >= ENTER_VISIBLE_RATIO;
+	}
+
+	// 페이지3에서 위로 스크롤 시 페이지2로만 정확히 이동 (페이지1로 넘어가는 것 방지)
+	function scrollUpToSeqSection() {
+		if (seqSection) {
+			window.scrollTo({ top: seqSection.offsetTop, behavior: "smooth" });
+		}
+	}
+
 	// 휠: 시퀀스 구간. 시퀀스 완료 후 아래 스크롤은 일반 스크롤로 섹션3 이동.
 	function onWheel(e) {
-		if (!seqSectionInView) return;
 		const dy = e.deltaY;
+		// 페이지3에 있을 때 위로 스크롤 → 페이지2로만 이동 (과도한 위로 스크롤 방지)
+		if (!seqSectionInView && dy < -WHEEL_THRESH && isBubbleSectionInView()) {
+			e.preventDefault();
+			scrollUpToSeqSection();
+			return;
+		}
+		if (!seqSectionInView) return;
 		if (dy > WHEEL_THRESH) {
 			if (isSequenceComplete()) {
 				gsap.to(".sequence-text3", {
@@ -387,11 +412,20 @@ images[0].onload = () => {
 	}
 
 	function onTouchMove(e) {
-		if (!seqSectionInView) return;
 		const y = e.touches[0].clientY;
 		const delta = touchStartY - y;
 		touchStartY = y;
 		cumulativeTouch += delta;
+
+		// 페이지3에 있을 때 위로 스크롤 → 페이지2로만 이동 (과도한 위로 스크롤 방지)
+		if (!seqSectionInView) {
+			if (isBubbleSectionInView() && cumulativeTouch < -TOUCH_THRESH) {
+				e.preventDefault();
+				cumulativeTouch = 0;
+				scrollUpToSeqSection();
+			}
+			return;
+		}
 
 		if (cumulativeTouch > TOUCH_THRESH) {
 			cumulativeTouch = 0;
