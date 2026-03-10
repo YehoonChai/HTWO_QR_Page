@@ -101,10 +101,9 @@ images[0].onload = () => {
 	let isStageAnimating = false;
 	const WHEEL_THRESH = 8; // 휠 민감도 (낮을수록 작은 스크롤에도 반응)
 	const TOUCH_THRESH = 18; // 터치 한 번에 한 단계씩
-	// 페이지2 도달 전: 일반 스크롤. 도달 후: 이미지 시퀀스.
-	const ENTER_SLOP = 25; // 2페이지가 화면 대부분 채우면 시퀀스 모드 진입 (너무 엄격하면 진입 안 함)
-	const EXIT_TOP = 70;
-	const EXIT_BOTTOM = 70;
+	// 뷰포트 대비 비율로 판정 (--vh/해상도에 덜 민감)
+	const ENTER_VISIBLE_RATIO = 0.65; // 화면의 65% 이상이 섹션이면 시퀀스 모드 진입
+	const EXIT_VISIBLE_RATIO = 0.45; // 45% 미만이면 이탈 (히스테리시스)
 
 	// 텍스트: 이탈 시 빠르게 fade-out, 33/56/184 도착 직전에만 빠르게 fade-in (그 사이는 공백)
 	const TEXT_FADE_OUT_DUR = 0.12;
@@ -121,11 +120,16 @@ images[0].onload = () => {
 		if (!seqSection) return;
 		const r = seqSection.getBoundingClientRect();
 		const H = window.innerHeight;
+		// 시퀀스 섹션과 뷰포트가 겹치는 높이 (비율 기준으로 진입/이탈 판정)
+		const visibleTop = Math.max(0, r.top);
+		const visibleBottom = Math.min(H, r.bottom);
+		const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+		const visibleRatio = H > 0 ? visibleHeight / H : 0;
 		prevSeqSectionInView = seqSectionInView;
 		if (!seqSectionInView) {
-			seqSectionInView = r.top <= ENTER_SLOP && r.bottom >= H - ENTER_SLOP;
+			seqSectionInView = visibleRatio >= ENTER_VISIBLE_RATIO;
 		} else {
-			seqSectionInView = !(r.top > EXIT_TOP || r.bottom < H - EXIT_BOTTOM);
+			seqSectionInView = visibleRatio >= EXIT_VISIBLE_RATIO;
 		}
 		// 다음 페이지로 이동 시작 시 .rain-text 페이드아웃, 페이지1 복귀 시 갭 뒤 페이드인
 		const rainText = document.querySelector(".rain-text");

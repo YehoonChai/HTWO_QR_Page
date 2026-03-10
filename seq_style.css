@@ -1,5 +1,7 @@
-/* 섹션 1,2,3 레이아웃 (스냅은 JS에서만 제어) */
+/* 섹션 1,2,3 레이아웃 + 스크롤 스냅으로 페이지 건너뛰기 방지 */
 html {
+	scroll-snap-type: y mandatory;
+	scroll-behavior: smooth;
 }
 body {
 	overflow-x: hidden;
@@ -9,6 +11,8 @@ body {
 .bubble-section {
 	height: calc(var(--vh, 1vh) * 100);
 	min-height: calc(var(--vh, 1vh) * 100);
+	scroll-snap-align: start;
+	scroll-snap-stop: always;
 }
 
 .bubble-section {
