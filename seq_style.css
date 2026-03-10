@@ -7,8 +7,8 @@ body {
 .page,
 .seq-section,
 .bubble-section {
-	height: 100vh;
-	min-height: 100vh;
+	height: calc(var(--vh, 1vh) * 100);
+	min-height: calc(var(--vh, 1vh) * 100);
 }
 
 .bubble-section {
@@ -25,7 +25,7 @@ body {
 }
 
 .spacer {
-	height: 100vh;
+	height: calc(var(--vh, 1vh) * 100);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -34,7 +34,7 @@ body {
 
 .seq-section .canvas-container {
 	width: 100%;
-	height: 100vh;
+	height: calc(var(--vh, 1vh) * 100);
 	position: relative;
 	top: 0;
 	left: 0;
@@ -48,7 +48,7 @@ body {
 	width: 100%;
 	height: 100%;
 	max-width: 100vw;
-	max-height: 100vh;
+	max-height: calc(var(--vh, 1vh) * 100);
 	object-fit: contain;
 }
 

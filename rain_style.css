@@ -44,7 +44,7 @@ body {
 /* 중앙 비 오는 영역 컨테이너 */
 .rain-zone {
 	width: 100%;
-	height: 100vh;
+	height: calc(var(--vh, 1vh) * 100);
 	overflow: hidden;
 	box-shadow:
 		0 20px 60px rgba(0, 0, 0, 0.4),
