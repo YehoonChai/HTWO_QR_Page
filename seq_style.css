@@ -1,6 +1,7 @@
-/* 섹션 1,2,3 레이아웃 + 스크롤 스냅으로 페이지 건너뛰기 방지 */
+/* 섹션 1,2,3 레이아웃
+   스크롤 스냅은 너무 강하게 걸면 3→1로 튀는 현상이 생겨서 제거하고,
+   페이지 전환 제어는 JS(seq_script.js) 쪽에서만 처리 */
 html {
-	scroll-snap-type: y mandatory;
 	scroll-behavior: smooth;
 }
 body {
@@ -11,8 +12,6 @@ body {
 .bubble-section {
 	height: calc(var(--vh, 1vh) * 100);
 	min-height: calc(var(--vh, 1vh) * 100);
-	scroll-snap-align: start;
-	scroll-snap-stop: always;
 }
 
 .bubble-section {
