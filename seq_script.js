@@ -225,7 +225,7 @@ images[0].onload = () => {
 			next === "stage1"
 				? 1.2
 				: current === "stage2" && next === "stage3"
-					? 7
+					? 4
 					: current === "stage1" && next === "stage2"
 						? 1
 						: 3.5;

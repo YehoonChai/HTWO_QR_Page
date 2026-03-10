@@ -44,6 +44,9 @@
     <!-- 이미지 시퀀싱 아래 버블(파티클) 섹션 -->
     <section id="bubble-section" class="bubble-section">
         <div id="particles-js"></div>
+        <div class="bubble-text"
+            style="position: absolute; bottom: 10%; left: 50%; transform: translate(-50%, -50%); color: #7b7b7bcc; font-size: 15px; font-weight: 700;">
+            화면을 터치해보세요
     </section>
 
     <style>
@@ -83,7 +86,7 @@
 
                 // [핵심] easeOutExpo: 0에서 1로 갈수록 속도가 급격히 줄어듭니다.
                 // 마지막 2천만에 도달할 때 아주 쫀득하게 붙는 느낌을 줍니다.
-                const eased = t === 1 ? 1 : 1 - Math.pow(2, -30 * t);
+                const eased = t === 1 ? 1 : 1 - Math.pow(2, -26 * t);
                 const current = from + (to - from) * eased;
 
                 el.textContent = formatRainNumber(current);
@@ -259,14 +262,17 @@
         (function setupRainVisibilityLifecycle() {
             if (!rainZone) return;
             let isActive = false;
+            let scrollRecoveryScheduled = false;
 
             const io = new IntersectionObserver(
                 (entries) => {
                     const entry = entries[0];
                     const ratio = entry ? entry.intersectionRatio : 0;
                     // 히스테리시스: 들어올 때/나갈 때 기준을 다르게 해서 깜빡임 방지
-                    if (!isActive && ratio >= 0.6) {
+                    // Safari는 ratio를 늦게/다르게 줄 수 있어서 진입 기준을 0.4로 완화
+                    if (!isActive && ratio >= 0.4) {
                         isActive = true;
+                        scrollRecoveryScheduled = false;
                         stopRain();
                         startRain();
                     } else if (isActive && ratio <= 0.15) {
@@ -274,9 +280,23 @@
                         stopRain();
                     }
                 },
-                { threshold: [0, 0.15, 0.6, 1] }
+                { threshold: [0, 0.15, 0.4, 0.6, 1] }
             );
             io.observe(rainZone);
+
+            // Safari: 스크롤 복귀 시 IO가 안 불릴 수 있어, 맨 위 근처면 비 재시작 시도
+            window.addEventListener("scroll", () => {
+                if (rain || !rainZone || scrollRecoveryScheduled) return;
+                const y = window.scrollY ?? document.documentElement.scrollTop;
+                const rect = rainZone.getBoundingClientRect();
+                if (y < 200 && rect.bottom > 100) {
+                    scrollRecoveryScheduled = true;
+                    requestAnimationFrame(() => {
+                        if (!rain && rainZone) startRain();
+                        scrollRecoveryScheduled = false;
+                    });
+                }
+            }, { passive: true });
 
             window.addEventListener("pagehide", stopRain);
             document.addEventListener("visibilitychange", () => {
