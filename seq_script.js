@@ -111,7 +111,8 @@ images[0].onload = () => {
 	const TEXT_FADE_IN_DUR = 0.4; // 도착 직전 페이드인 시간
 	const TEXT_FADE_IN_LEAD = 0.15; // 이미지 정지 N초 전에 페이드인 완료
 	const TEXT_FADE_IN_DUR_184 = 0.5; // 184 도착 직전 페이드인 시간
-	const TEXT_FADE_IN_LEAD_184 = 0.01; // 이미지 정지 N초 전에 페이드인 완료 (작을수록 텍스트3 더 늦게 나타남)
+	const TEXT_FADE_IN_LEAD_184 = 0.01; // 이미지 정지 N초 전에 페이드인 완료
+	const TEXT_FADE_IN_DELAY_184 = 0.35; // 텍스트3 추가 지연 (클수록 더 늦게 나타남)
 	// textTl 내부 세그먼트 길이 (playhead seek용, 위 타임라인 .to duration과 일치)
 	const TEXT_TL_TEXT1_OUT = 0.25;
 	const TEXT_TL_TEXT2_OUT = 0.35;
@@ -232,7 +233,9 @@ images[0].onload = () => {
 		const isTo184 = next === "stage3";
 		const tInDur = isTo184 ? TEXT_FADE_IN_DUR_184 : TEXT_FADE_IN_DUR;
 		const tInLead = isTo184 ? TEXT_FADE_IN_LEAD_184 : TEXT_FADE_IN_LEAD;
-		const textDelay = Math.max(0, imgDuration - tInLead - tInDur);
+		const textDelay =
+			Math.max(0, imgDuration - tInLead - tInDur) +
+			(isTo184 ? TEXT_FADE_IN_DELAY_184 : 0);
 
 		// tweenTo 시 이전 텍스트가 다시 보이지 않도록: 재생헤드를 "이전 텍스트 이미 0" 위치로
 		if (next === "stage2")

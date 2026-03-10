@@ -83,7 +83,7 @@
 
                 // [핵심] easeOutExpo: 0에서 1로 갈수록 속도가 급격히 줄어듭니다.
                 // 마지막 2천만에 도달할 때 아주 쫀득하게 붙는 느낌을 줍니다.
-                const eased = t === 1 ? 1 : 1 - Math.pow(2, -27 * t);
+                const eased = t === 1 ? 1 : 1 - Math.pow(2, -30 * t);
                 const current = from + (to - from) * eased;
 
                 el.textContent = formatRainNumber(current);
@@ -164,9 +164,10 @@
                 background: "bg.jpg",
                 backgroundOffsetX: 0,
                 spawnInterval: [0.7, 2],
-                spawnLimit: 25,
+                spawnLimit: 15,
                 dropletsPerSeconds: 0,
                 dropletSize: [4, 9],
+                trailDropSize: [0.4, 0.65],
                 mist: true,
                 mistColor: [0.03, 0.035, 0.04, 1],
                 mistTime: 20,
