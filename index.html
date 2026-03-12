@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RainyFx</title>
     <link rel="stylesheet" href="./rain_style.css">
     <link rel="stylesheet" href="./seq_style.css">
@@ -26,424 +26,404 @@
         <div class="rain-zone" id="rainZone">
             <canvas id="rainCanvas"></canvas>
             <div class="rain-text">
-                <div class="rain-text-title">XCIENT Fuel Cell</div>
+                <div class="rain-text-title">XCIENT Fuel Cell 누적 운행거리</div>
                 <div class="rain-text-number-row">
-                    <span id="rainNumber">00,000,000</span><span class="rain-text-unit">km 도달</span>
+                    <span id="rainNumber">00,000,000</span><span class="rain-text-unit">km</span>
                 </div>
             </div>
             <div class="rain-text-bottom">
                 <div class="rain-text-bottom-container">
-                    <div class="rain-text-bottom-title">Stop delivering CO<sub>2</sub> emissions.</div>
-                    <div class="rain-text-bottom-content">XCIENT Fuel Cell accomplished a total mileage of 4 million
-                        miles in Switzerland, equivalent to the carbon reduction effect of 1.12 Central Parks. This area
-                        is
-                        equal to 686 American football fields in size. The fuel cell trucks deliver an air-purifying
-                        effect while emitting no pollutants. XCIENT Fuel Cell is shattering records all around the
-                        world.</div>
+                    <div class="rain-text-bottom-title">탄소 배출 없는 운송의 시작</div>
+                    <div class="rain-text-bottom-content">스위스에서 증명한 400만 마일의 기적으로 센트럴 파크 1.12개의 면적, 혹은 미식축구장 686개 규모의 숲이
+                        흡수하는 탄소량을
+                        XCIENT Fuel Cell이 직접 줄여냈습니다.
+                        지금 이 순간에도 전 세계의 환경 기록을 새롭게 경신 중입니다.</div>
                 </div>
                 <div class="rain-text-bottom-container">
-                    <div class="rain-text-bottom-title">Moving air purifier.</div>
-                    <div class="rain-text-bottom-content">In the Hyundai XCIENT Fuel Cell, the further you drive, the
-                        cleaner the air becomes thanks to the fuel cell system that scrubs 99.9% of particulates out of
-                        the air it ingests. No other fuel system on Earth actually improves air quality as you drive.
+                    <div class="rain-text-bottom-title">달리는 공기청정기</div>
+                    <div class="rain-text-bottom-content">달릴수록 세상의 공기는 더 맑아집니다.
+                        흡입하는 공기 속 미세먼지를 99.9%까지 완벽하게 정화합니다.
+                        단순한 무공해를 넘어, 주행만으로 공기질을 개선하는 유일한 기술입니다.
                     </div>
                 </div>
                 <div class="rain-text-bottom-container">
-                    <div class="rain-text-bottom-title">Emits only pure water.</div>
-                    <div class="rain-text-bottom-content">In one year of operation, a single XCIENT Fuel Cell reduces
-                        carbon emissions by approximately 70 tons or nearly two loaded semi-trailers in carbon weight.
-                        XCIENT Fuel Cell emits only pure water.</div>
+                    <div class="rain-text-bottom-title">오직 순수한 물만 배출</div>
+                    <div class="rain-text-bottom-content">연간 70톤의 탄소 감축, 배출물은 오직 깨끗한 물뿐.
+                        XCIENT Fuel Cell 한 대가 대형 트레일러 2대 분량의 탄소 무게를 덜어냅니다.
+                        환경에 대한 부담은 비우고, 깨끗한 미래를 향한 동력만을 채웠습니다.</div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- 스크롤 시 아래에 나오는 시퀀스 섹션 -->
-        <section id="seq-section" class="seq-section">
-            <div class="canvas-container">
-                <canvas id="sequence-canvas"></canvas>
-                <div class="sequence-text1">
-                    <h1>수소연료전지</h1>
-                    <p>현대자동차그룹에서 개발하고 있는 <br /> PEM 수전해는 수소연료전지와 동일한 <br /> 고분자 전해질막을 사용합니다.</p>
-                </div>
-                <div class="sequence-text2">
-                    <h1>높은기술연계성</h1>
-                    <p>수소연료전지의 역반응으로 <br />수소를 생산하기에 <br />높은 기술 연계성을 자랑합니다. </p>
-                </div>
-                <div class="sequence-text3">
-                    <h1>PEM 수전해</h1>
-                    <p>높은 에너지 효율과 빠른 응답성을 갖춘 PEM 수전해 </p>
-                </div>
+    <!-- 스크롤 시 아래에 나오는 시퀀스 섹션 -->
+    <section id="seq-section" class="seq-section">
+        <div class="canvas-container">
+            <canvas id="sequence-canvas"></canvas>
+            <div class="sequence-text1">
+                <h1>수소연료전지</h1>
+                <p>현대자동차그룹에서 개발하고 있는 <br /> PEM 수전해는 수소연료전지와 동일한 <br /> 고분자 전해질막을 사용합니다.</p>
             </div>
-        </section>
-
-        <!-- 이미지 시퀀싱 아래 버블(파티클) 섹션 -->
-        <section id="bubble-section" class="bubble-section">
-            <div id="particles-js"></div>
-            <div class="bubble-text"
-                style="position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); color: #7b7b7baf; font-size: 15px; font-weight: 700;">
-                화면을 터치해보세요
+            <div class="sequence-text2">
+                <h1>높은기술연계성</h1>
+                <p>수소연료전지의 역반응으로 <br />수소를 생산하기에 <br />높은 기술 연계성을 자랑합니다. </p>
             </div>
-        </section>
+            <div class="sequence-text3">
+                <h1>PEM 수전해</h1>
+                <p>높은 에너지 효율과 빠른 응답성을 갖춘 PEM 수전해 </p>
+            </div>
+        </div>
+    </section>
 
-        <style>
-            #particles-js {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                min-height: calc(var(--vh, 1vh) * 100);
-                background-color: #ffffff;
-                background-repeat: no-repeat;
-                background-size: cover;
-                background-position: 50% 50%;
-            }
-        </style>
+    <!-- 이미지 시퀀싱 아래 버블(파티클) 섹션 -->
+    <section id="bubble-section" class="bubble-section">
+        <div id="particles-js"></div>
+        <div class="bubble-text"
+            style="position: absolute; bottom: 10%; left: 50%; transform: translate(-50%, -50%); color: #7b7b7bcc; font-size: 15px; font-weight: 700;">
+            화면을 터치해보세요
+    </section>
 
-        <script src="./rain_raindrop-fx.js"></script>
+    <style>
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            background-color: #f5f9ff;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 50% 50%;
+        }
+    </style>
 
-        <script>
-            const rainZone = document.getElementById("rainZone");
-            const canvas = document.getElementById("rainCanvas");
-            const rainNumberEl = document.getElementById("rainNumber");
+    <script src="./rain_raindrop-fx.js"></script>
 
-            function formatRainNumber(value) {
-                const padded = Math.floor(value).toString().padStart(8, "0");
-                return padded.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
+    <script>
+        const rainZone = document.getElementById("rainZone");
+        const canvas = document.getElementById("rainCanvas");
+        const rainNumberEl = document.getElementById("rainNumber");
 
-            const TARGET_KM = 20000000;
+        function formatRainNumber(value) {
+            const padded = Math.floor(value).toString().padStart(8, "0");
+            return padded.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
 
-            function animateRainNumber(el, from, to, duration, onComplete) {
-                let startTime = null;
+        const TARGET_KM = 20000000;
 
-                function step(timestamp) {
-                    if (!startTime) startTime = timestamp;
-                    const elapsed = timestamp - startTime;
-                    const t = Math.min(elapsed / duration, 1);
+        function animateRainNumber(el, from, to, duration, onComplete) {
+            let startTime = null;
 
-                    // [핵심] easeOutExpo: 0에서 1로 갈수록 속도가 급격히 줄어듭니다.
-                    const eased = t === 1 ? 1 : 1 - Math.pow(2, -26 * t);
-                    const current = from + (to - from) * eased;
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const elapsed = timestamp - startTime;
+                const t = Math.min(elapsed / duration, 1);
 
-                    el.textContent = formatRainNumber(current);
+                // [핵심] easeOutExpo: 0에서 1로 갈수록 속도가 급격히 줄어듭니다.
+                const eased = t === 1 ? 1 : 1 - Math.pow(2, -26 * t);
+                const current = from + (to - from) * eased;
 
-                    if (t < 1) {
-                        requestAnimationFrame(step);
-                    } else {
-                        el.textContent = formatRainNumber(to);
-                        if (typeof onComplete === "function") onComplete();
-                    }
-                }
+                el.textContent = formatRainNumber(current);
 
-                requestAnimationFrame(step);
-            }
-
-            function startLiveTicker(el) {
-                let value = TARGET_KM;
-
-                function tick() {
-                    // 1~4 중 랜덤 증가 (실시간으로 조금씩 오르는 느낌)
-                    value += Math.floor(1 + Math.random() * 6);
-                    el.textContent = formatRainNumber(value);
-                    // 다음 증가까지 400ms ~ 1800ms 랜덤
-                    const nextDelay = 30 + Math.random() * 300;
-                    setTimeout(tick, nextDelay);
-                }
-
-                tick();
-            }
-
-            if (rainNumberEl) {
-                animateRainNumber(rainNumberEl, 0, TARGET_KM, 4000, function () {
-                    startLiveTicker(rainNumberEl);
-                });
-            }
-
-
-            const isMobile = window.innerWidth <= 768;
-
-            function setCanvasSize() {
-                const w = rainZone.clientWidth || window.innerWidth;
-                const h = rainZone.clientHeight || window.innerHeight;
-                canvas.width = w;
-                canvas.height = h;
-                return { width: w, height: h };
-            }
-
-            let rain;
-            let rainResizeObserver = null;
-            let rainSession = 0;
-
-            function stopRain() {
-                rainSession += 1; // 진행 중인 start() 비동기 보호
-
-                rainZone.classList.remove('canvas-ready');
-                canvas.style.opacity = '0';
-
-                if (rainResizeObserver) {
-                    try { rainResizeObserver.disconnect(); } catch (e) { }
-                    rainResizeObserver = null;
-                }
-
-                if (rain) {
-                    try { rain.destroy(); } catch (e) { }
-                    rain = null;
+                if (t < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    el.textContent = formatRainNumber(to);
+                    if (typeof onComplete === "function") onComplete();
                 }
             }
 
-            function startRain() {
-                const session = (rainSession += 1);
+            requestAnimationFrame(step);
+        }
 
-                // 이미 실행 중이면 재시작하지 않음
-                if (rain) return;
+        function startLiveTicker(el) {
+            let value = TARGET_KM;
 
-                setCanvasSize();
-
-                // bg.jpg 로드 완료 후 캔버스 페이드인 + 블러 오버레이 동시 페이드아웃
-                canvas.style.opacity = '0';
-                canvas.style.transition = 'opacity 1.2s ease-in';
-                rainZone.classList.remove('canvas-ready');
-                const _bgPreload = new Image();
-                const onBgReady = () => {
-                    if (session !== rainSession) return; // 중간에 stop/restart 되었으면 무시
-                    canvas.style.opacity = '1';
-                    rainZone.classList.add('canvas-ready');
-                };
-                _bgPreload.onload = onBgReady;
-                _bgPreload.onerror = onBgReady;
-                _bgPreload.src = 'bg.jpg';
-
-                rain = new RaindropFX({
-                    canvas: canvas,
-                    background: "bg.jpg",
-                    backgroundOffsetX: 0,
-                    spawnInterval: [0.7, 2],
-                    spawnLimit: 15,
-                    dropletsPerSeconds: 0,
-                    dropletSize: [4, 9],
-                    trailDropSize: [0.4, 0.65],
-                    mist: true,
-                    mistColor: [0.03, 0.035, 0.04, 1],
-                    mistTime: 10,
-                    mistBlurStep: 3,
-                    backgroundBlurSteps: 1,
-                    evaporate: 2,
-                    gravity: 300,
-                    raindropMaxSize: 30,
-                    refractBase: 0.55,
-                    refractScale: 0.82,
-                    raindropLightBump: 1.6,
-                });
-
-                // start()는 내부에서 텍스처 로딩/초기 미스트·방울을 채우는 과정이 있어 async
-                Promise.resolve(rain.start()).catch(() => { /* 로드 실패 시에도 CSS bg는 남음 */ });
-
-                // ========== 커스텀 가능한 옵션 (아래처럼 start 후에 수정) ==========
-                // new RaindropFX({ canvas, background: "bg.jpg", spawnInterval: [0.05, 0.2], ... })
-                //
-                // [배경]
-                //   background          - 배경 이미지 URL 또는 이미지 데이터 (기본: "")
-                //   backgroundBlurSteps - 배경 블러 강도 (기본: 3)
-                //   backgroundWrapMode  - "clamp" | "mirror" | "repeat"
-                //
-                // [빗방울 생성]
-                //   spawnInterval      - 생성 간격(초) [최소, 최대] (기본: [0.1, 0.1])
-                //   spawnSize          - 빗방울 크기 [최소, 최대] 픽셀 (기본: [60, 100])
-                //   spawnLimit         - 동시에 존재하는 최대 빗방울 수 (기본: 2000)
-                //
-                // [물리/움직임]
-                //   gravity            - 중력 (기본: 2400)
-                //   slipRate           - 미끄러짐 (0~1) (기본: 0)
-                //   motionInterval     - 움직임 갱신 간격 [최소, 최대] 초 (기본: [0.1, 0.4])
-                //   colliderSize       - 충돌 판정 크기 (기본: 1)
-                //   velocitySpread     - 속도 분산 (기본: 0.3)
-                //   xShifting          - 좌우 흔들림 [최소, 최대] (기본: [0, 0.1])
-                //   evaporate          - 증발 속도 (기본: 10)
-                //
-                // [꼬리/물방울]
-                //   trailDropDensity   - 꼬리 물방울 밀도 (기본: 0.2)
-                //   trailDistance      - 꼬리 간격 [최소, 최대] (기본: [20, 30])
-                //   trailDropSize      - 꼬리 물방울 크기 [최소, 최대] (기본: [0.3, 0.5])
-                //   trailSpread        - 꼬리 퍼짐 (기본: 0.6)
-                //   initialSpread      - 초기 퍼짐 (기본: 0.5)
-                //   shrinkRate         - 수축률 (기본: 0.01)
-                //
-                // [안개/미스트]
-                //   mist               - 미스트 사용 여부 (기본: true)
-                //   mistColor          - [r, g, b, a] (기본: [0.01, 0.01, 0.01, 1])
-                //   mistBlurStep       - 미스트 블러 (기본: 4)
-                //   mistTime           - 미스트 시간 (기본: 10)
-                //
-                // [작은 물방울]
-                //   dropletsPerSeconds - 초당 작은 물방울 수 (기본: 500)
-                //   dropletSize        - [최소, 최대] (기본: [10, 30])
-                //
-                // [렌더링/굴절]
-                //   smoothRaindrop     - [최소, 최대] (기본: [0.96, 0.99])
-                //   refractBase        - 굴절 기본값 (기본: 0.4)
-                //   refractScale       - 굴절 스케일 (기본: 0.6)
-                //   raindropCompose    - "smoother" 등
-                //   raindropLightPos   - [x, y, z, w] (기본: [-1, 1, 2, 0])
-                //   raindropDiffuseLight - [r, g, b] (기본: [0.2, 0.2, 0.2])
-                //   raindropShadowOffset  - (기본: 0.8)
-                //   raindropEraserSize - [최소, 최대] (기본: [0.93, 1])
-                //   raindropSpecularLight, raindropSpecularShininess, raindropLightBump
-                // =============================================================================
-
-                // start() 이후 옵션 미세 조정 (필요시 여기서 변경)
-                // if (rain.renderer && rain.renderer.options) {
-                //     rain.renderer.options.dropletsPerSeconds = 2500;
-                // }
-
-
-
-                if (rainResizeObserver) {
-                    try { rainResizeObserver.disconnect(); } catch (e) { }
-                }
-                rainResizeObserver = new ResizeObserver(() => {
-                    const { width, height } = setCanvasSize();
-                    if (width > 0 && height > 0 && rain && rain.resize) {
-                        try { rain.resize(width, height); } catch (e) { }
-                    }
-                });
-                rainResizeObserver.observe(rainZone);
+            function tick() {
+                // 1~4 중 랜덤 증가 (실시간으로 조금씩 오르는 느낌)
+                value += Math.floor(1 + Math.random() * 6);
+                el.textContent = formatRainNumber(value);
+                // 다음 증가까지 400ms ~ 1800ms 랜덤
+                const nextDelay = 30 + Math.random() * 300;
+                setTimeout(tick, nextDelay);
             }
 
-            // 페이지1을 이탈하면 효과를 끄고, 돌아오면 처음부터 다시 시작
-            (function setupRainVisibilityLifecycle() {
-                if (!rainZone) return;
-                let isActive = false;
-                let scrollRecoveryScheduled = false;
+            tick();
+        }
 
-                const io = new IntersectionObserver(
-                    (entries) => {
-                        const entry = entries[0];
-                        const ratio = entry ? entry.intersectionRatio : 0;
-                        // 히스테리시스: 들어올 때/나갈 때 기준을 다르게 해서 깜빡임 방지
-                        // Safari는 ratio를 늦게/다르게 줄 수 있어서 진입 기준을 0.4로 완화
-                        if (!isActive && ratio >= 0.4) {
-                            isActive = true;
-                            scrollRecoveryScheduled = false;
-                            stopRain();
-                            startRain();
-                        } else if (isActive && ratio <= 0.15) {
-                            isActive = false;
-                            stopRain();
-                        }
-                    },
-                    { threshold: [0, 0.15, 0.4, 0.6, 1] }
-                );
-                io.observe(rainZone);
+        if (rainNumberEl) {
+            animateRainNumber(rainNumberEl, 0, TARGET_KM, 4000, function () {
+                startLiveTicker(rainNumberEl);
+            });
+        }
 
-                // Safari: 스크롤 복귀 시 IO가 안 불릴 수 있어, 맨 위 근처면 비 재시작 시도
-                window.addEventListener("scroll", () => {
-                    if (rain || !rainZone || scrollRecoveryScheduled) return;
-                    const y = window.scrollY ?? document.documentElement.scrollTop;
-                    const rect = rainZone.getBoundingClientRect();
-                    if (y < 200 && rect.bottom > 100) {
-                        scrollRecoveryScheduled = true;
-                        requestAnimationFrame(() => {
-                            if (!rain && rainZone) startRain();
-                            scrollRecoveryScheduled = false;
-                        });
-                    }
-                }, { passive: true });
+        // 하단 카피 순차 페이드인/리셋 함수
+        function showRainBottomItems(baseDelay = 500) {
+            const bottomItems = document.querySelectorAll(".rain-text-bottom-container");
+            if (!bottomItems.length) return;
 
-                window.addEventListener("pagehide", stopRain);
-                document.addEventListener("visibilitychange", () => {
-                    if (document.hidden) stopRain();
-                });
-            })();
+            bottomItems.forEach((el) => {
+                el.classList.remove("is-visible");
+            });
 
-            // load 이벤트 이후 초기화 → 모바일에서 layout 완성 후 canvas 크기 확보
-            window.addEventListener("load", startRain);
+            bottomItems.forEach((el, index) => {
+                const delay = baseDelay + index * 800; // 0.5s, 1.3s, 2.1s ...
+                setTimeout(() => {
+                    el.classList.add("is-visible");
+                }, delay);
+            });
+        }
 
-            window.addEventListener("resize", () => {
+        function hideRainBottomItems() {
+            const bottomItems = document.querySelectorAll(".rain-text-bottom-container");
+            bottomItems.forEach((el) => el.classList.remove("is-visible"));
+        }
+
+        // 페이지 진입 시 하단 3개의 카피를 순차 페이드인
+        window.addEventListener("load", function () {
+            showRainBottomItems(500);
+        });
+
+        const isMobile = window.innerWidth <= 768;
+
+        function setCanvasSize() {
+            const w = rainZone.clientWidth || window.innerWidth;
+            const h = rainZone.clientHeight || window.innerHeight;
+            canvas.width = w;
+            canvas.height = h;
+            return { width: w, height: h };
+        }
+
+        let rain;
+        let rainResizeObserver = null;
+        let rainSession = 0;
+
+        function stopRain() {
+            rainSession += 1; // 진행 중인 start() 비동기 보호
+
+            rainZone.classList.remove('canvas-ready');
+            canvas.style.opacity = '0';
+
+            if (rainResizeObserver) {
+                try { rainResizeObserver.disconnect(); } catch (e) { }
+                rainResizeObserver = null;
+            }
+
+            if (rain) {
+                try { rain.destroy(); } catch (e) { }
+                rain = null;
+            }
+        }
+
+        function startRain() {
+            const session = (rainSession += 1);
+
+            // 이미 실행 중이면 재시작하지 않음
+            if (rain) return;
+
+            setCanvasSize();
+
+            // bg.jpg 로드 완료 후 캔버스 페이드인 + 블러 오버레이 동시 페이드아웃
+            canvas.style.opacity = '0';
+            canvas.style.transition = 'opacity 1.2s ease-in';
+            rainZone.classList.remove('canvas-ready');
+            const _bgPreload = new Image();
+            const onBgReady = () => {
+                if (session !== rainSession) return; // 중간에 stop/restart 되었으면 무시
+                canvas.style.opacity = '1';
+                rainZone.classList.add('canvas-ready');
+            };
+            _bgPreload.onload = onBgReady;
+            _bgPreload.onerror = onBgReady;
+            _bgPreload.src = 'bg.jpg';
+
+            rain = new RaindropFX({
+                canvas: canvas,
+                background: "bg.jpg",
+                backgroundOffsetX: 0,
+                spawnInterval: [0.7, 2],
+                spawnLimit: 15,
+                dropletsPerSeconds: 0,
+                dropletSize: [4, 9],
+                trailDropSize: [0.4, 0.65],
+                mist: true,
+                mistColor: [0.03, 0.035, 0.04, 1],
+                mistTime: 10,
+                mistBlurStep: 3,
+                backgroundBlurSteps: 1,
+                evaporate: 2,
+                gravity: 300,
+                raindropMaxSize: 30,
+                refractBase: 0.3,
+                refractScale: 0.82,
+                raindropLightBump: 1.6,
+            });
+
+            // start()는 내부에서 텍스처 로딩/초기 미스트·방울을 채우는 과정이 있어 async
+            Promise.resolve(rain.start()).catch(() => { /* 로드 실패 시에도 CSS bg는 남음 */ });
+
+            // ========== 커스텀 가능한 옵션 (아래처럼 start 후에 수정) ==========
+            // new RaindropFX({ canvas, background: "bg.jpg", spawnInterval: [0.05, 0.2], ... })
+            //
+            // [배경]
+            //   background          - 배경 이미지 URL 또는 이미지 데이터 (기본: "")
+            //   backgroundBlurSteps - 배경 블러 강도 (기본: 3)
+            //   backgroundWrapMode  - "clamp" | "mirror" | "repeat"
+            //
+            // [빗방울 생성]
+            //   spawnInterval      - 생성 간격(초) [최소, 최대] (기본: [0.1, 0.1])
+            //   spawnSize          - 빗방울 크기 [최소, 최대] 픽셀 (기본: [60, 100])
+            //   spawnLimit         - 동시에 존재하는 최대 빗방울 수 (기본: 2000)
+            //
+            // [물리/움직임]
+            //   gravity            - 중력 (기본: 2400)
+            //   slipRate           - 미끄러짐 (0~1) (기본: 0)
+            //   motionInterval     - 움직임 갱신 간격 [최소, 최대] 초 (기본: [0.1, 0.4])
+            //   colliderSize       - 충돌 판정 크기 (기본: 1)
+            //   velocitySpread     - 속도 분산 (기본: 0.3)
+            //   xShifting          - 좌우 흔들림 [최소, 최대] (기본: [0, 0.1])
+            //   evaporate          - 증발 속도 (기본: 10)
+            //
+            // [꼬리/물방울]
+            //   trailDropDensity   - 꼬리 물방울 밀도 (기본: 0.2)
+            //   trailDistance      - 꼬리 간격 [최소, 최대] (기본: [20, 30])
+            //   trailDropSize      - 꼬리 물방울 크기 [최소, 최대] (기본: [0.3, 0.5])
+            //   trailSpread        - 꼬리 퍼짐 (기본: 0.6)
+            //   initialSpread      - 초기 퍼짐 (기본: 0.5)
+            //   shrinkRate         - 수축률 (기본: 0.01)
+            //
+            // [안개/미스트]
+            //   mist               - 미스트 사용 여부 (기본: true)
+            //   mistColor          - [r, g, b, a] (기본: [0.01, 0.01, 0.01, 1])
+            //   mistBlurStep       - 미스트 블러 (기본: 4)
+            //   mistTime           - 미스트 시간 (기본: 10)
+            //
+            // [작은 물방울]
+            //   dropletsPerSeconds - 초당 작은 물방울 수 (기본: 500)
+            //   dropletSize        - [최소, 최대] (기본: [10, 30])
+            //
+            // [렌더링/굴절]
+            //   smoothRaindrop     - [최소, 최대] (기본: [0.96, 0.99])
+            //   refractBase        - 굴절 기본값 (기본: 0.4)
+            //   refractScale       - 굴절 스케일 (기본: 0.6)
+            //   raindropCompose    - "smoother" 등
+            //   raindropLightPos   - [x, y, z, w] (기본: [-1, 1, 2, 0])
+            //   raindropDiffuseLight - [r, g, b] (기본: [0.2, 0.2, 0.2])
+            //   raindropShadowOffset  - (기본: 0.8)
+            //   raindropEraserSize - [최소, 최대] (기본: [0.93, 1])
+            //   raindropSpecularLight, raindropSpecularShininess, raindropLightBump
+            // =============================================================================
+
+            // start() 이후 옵션 미세 조정 (필요시 여기서 변경)
+            // if (rain.renderer && rain.renderer.options) {
+            //     rain.renderer.options.dropletsPerSeconds = 2500;
+            // }
+
+
+
+
+            if (rainResizeObserver) {
+                try { rainResizeObserver.disconnect(); } catch (e) { }
+            }
+            rainResizeObserver = new ResizeObserver(() => {
                 const { width, height } = setCanvasSize();
                 if (width > 0 && height > 0 && rain && rain.resize) {
-                    try { rain.resize(width, height); } catch (e) { /* rain 리사이즈 중 null 접근 방지 */ }
+                    try { rain.resize(width, height); } catch (e) { }
                 }
             });
-        </script>
+            rainResizeObserver.observe(rainZone);
+        }
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Observer.min.js"></script>
-        <script>
-            // 스크롤 시 무조건 섹션 단위로만 이동 (1→2→3, 3→2→1)
-            // 한 번의 휠/스와이프 제스처가 곧바로 "한 섹션" 이동이 되도록 JS에서만 제어
-            (function () {
-                const SNAP_LOCK_MS = 120;
-                const sections = [
-                    document.querySelector(".page"),
-                    document.getElementById("seq-section"),
-                    document.getElementById("bubble-section"),
-                ].filter(Boolean);
+        // 페이지1을 이탈하면 효과를 끄고, 돌아오면 처음부터 다시 시작
+        (function setupRainVisibilityLifecycle() {
+            if (!rainZone) return;
+            let isActive = false;
 
-                let sectionTops = [];
-                let scrollLockUntil = 0;
-                const WHEEL_THRESH = 3; // 너무 미세한 휠은 무시
-                const TOUCH_THRESH = 10; // 터치 한 번에 한 섹션 이동 기준
+            const io = new IntersectionObserver(
+                (entries) => {
+                    const entry = entries[0];
+                    const ratio = entry ? entry.intersectionRatio : 0;
+                    // 히스테리시스: 들어올 때/나갈 때 기준을 다르게 해서 깜빡임 방지
+                    // Safari는 ratio를 늦게/다르게 줄 수 있어서 진입 기준을 0.4로 완화
+                    if (!isActive && ratio >= 0.4) {
+                        isActive = true;
+                        scrollRecoveryScheduled = false;
+                        stopRain();
+                        startRain();
+                    } else if (isActive && ratio <= 0.15) {
+                        isActive = false;
+                        stopRain();
+                    }
+                },
+                { threshold: [0, 0.15, 0.4, 0.6, 1] }
+            );
+            io.observe(rainZone);
 
-                function updateSectionTops() {
-                    sectionTops = sections.map((el) => el.offsetTop);
+            // Safari: 스크롤 복귀 시 IO가 안 불릴 수 있어, 맨 위 근처면 비 재시작 시도
+            window.addEventListener("scroll", () => {
+                if (rain || !rainZone || scrollRecoveryScheduled) return;
+                const y = window.scrollY ?? document.documentElement.scrollTop;
+                const rect = rainZone.getBoundingClientRect();
+                if (y < 200 && rect.bottom > 100) {
+                    scrollRecoveryScheduled = true;
+                    requestAnimationFrame(() => {
+                        if (!rain && rainZone) startRain();
+                        scrollRecoveryScheduled = false;
+                    });
                 }
+            }, { passive: true });
 
-                window.addEventListener(
-                    "wheel",
-                    function (e) {
-                        if (!sectionTops.length) return;
-                        const now = Date.now();
-                        const dy = e.deltaY || 0;
-                        if (Math.abs(dy) < WHEEL_THRESH) return; // 너무 미세한 입력은 무시
+            window.addEventListener("pagehide", stopRain);
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) stopRain();
+            });
+        })();
 
-                        const y = window.scrollY ?? document.documentElement.scrollTop;
-                        // 현재 스크롤 위치 기준으로 가장 가까운 섹션 인덱스 계산
-                        let nearestIndex = 0;
-                        let minDist = Math.abs(y - sectionTops[0]);
-                        for (let i = 1; i < sectionTops.length; i++) {
-                            const d = Math.abs(y - sectionTops[i]);
-                            if (d < minDist) {
-                                minDist = d;
-                                nearestIndex = i;
-                            }
-                        }
+        // load 이벤트 이후 초기화 → 모바일에서 layout 완성 후 canvas 크기 확보
+        window.addEventListener("load", startRain);
 
-                        // 2페이지(시퀀스 구간)는 전용 스크립트가 휠 처리. 기본 스크롤만 막아서 페이지3로 넘어가는 것 방지
-                        if (nearestIndex === 1) {
-                            e.preventDefault();
-                            return;
-                        }
+        window.addEventListener("resize", () => {
+            const { width, height } = setCanvasSize();
+            if (width > 0 && height > 0 && rain && rain.resize) {
+                try { rain.resize(width, height); } catch (e) { /* rain 리사이즈 중 null 접근 방지 */ }
+            }
+        });
+    </script>
 
-                        // 브라우저 기본 스크롤 막고, 우리 로직으로만 섹션 이동
-                        e.preventDefault();
-                        e.stopPropagation();
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Observer.min.js"></script>
+    <script>
+        // 스크롤 시 무조건 섹션 단위로만 이동 (1→2→3, 3→2→1)
+        // 한 번의 휠/스와이프 제스처가 곧바로 "한 섹션" 이동이 되도록 JS에서만 제어
+        (function () {
+            const SNAP_LOCK_MS = 120;
+            const sections = [
+                document.querySelector(".page"),
+                document.getElementById("seq-section"),
+                document.getElementById("bubble-section"),
+            ].filter(Boolean);
 
-                        if (now < scrollLockUntil) return;
+            let sectionTops = [];
+            let scrollLockUntil = 0;
+            const WHEEL_THRESH = 3; // 너무 미세한 휠은 무시
+            const TOUCH_THRESH = 10; // 터치 한 번에 한 섹션 이동 기준
 
-                        let targetIndex = nearestIndex;
-                        if (dy > 0 && nearestIndex < sectionTops.length - 1) {
-                            targetIndex = nearestIndex + 1;
-                        } else if (dy < 0 && nearestIndex > 0) {
-                            targetIndex = nearestIndex - 1;
-                        } else {
-                            // 더 이상 이동할 섹션이 없으면 그대로
-                            return;
-                        }
+            function updateSectionTops() {
+                sectionTops = sections.map((el) => el.offsetTop);
+            }
 
-                        const targetTop = sectionTops[targetIndex];
-                        window.scrollTo({ top: targetTop, behavior: "smooth" });
-                        scrollLockUntil = now + SNAP_LOCK_MS;
-                    },
-                    { capture: true, passive: false }
-                );
-
-                // 스크롤이 끝난 뒤 가장 가까운 섹션에 스냅 (3→2 smooth 후 과하게 올라가는 것 보정)
-                window.addEventListener("scrollend", function () {
+            window.addEventListener(
+                "wheel",
+                function (e) {
                     if (!sectionTops.length) return;
-                    updateSectionTops();
+                    const now = Date.now();
+                    const dy = e.deltaY || 0;
+                    if (Math.abs(dy) < WHEEL_THRESH) return; // 너무 미세한 입력은 무시
+
                     const y = window.scrollY ?? document.documentElement.scrollTop;
+                    // 현재 스크롤 위치 기준으로 가장 가까운 섹션 인덱스 계산
                     let nearestIndex = 0;
                     let minDist = Math.abs(y - sectionTops[0]);
                     for (let i = 1; i < sectionTops.length; i++) {
@@ -453,171 +433,215 @@
                             nearestIndex = i;
                         }
                     }
-                    if (minDist > 20) {
-                        window.scrollTo({ top: sectionTops[nearestIndex], behavior: "auto" });
-                    }
-                });
 
-                var touchStartY = 0;
-                window.addEventListener(
-                    "touchstart",
-                    function (e) {
-                        touchStartY = e.touches[0].clientY;
-                    },
-                    { capture: true, passive: true }
-                );
-                window.addEventListener(
-                    "touchmove",
-                    function (e) {
-                        if (!sectionTops.length) return;
-                        const now = Date.now();
-                        const y = e.touches[0].clientY;
-                        const dy = touchStartY - y;
-
-                        if (Math.abs(dy) < TOUCH_THRESH) return; // 너무 미세한 스와이프는 무시
-
-                        const scrollY = window.scrollY ?? document.documentElement.scrollTop;
-                        let nearestIndex = 0;
-                        let minDist = Math.abs(scrollY - sectionTops[0]);
-                        for (let i = 1; i < sectionTops.length; i++) {
-                            const d = Math.abs(scrollY - sectionTops[i]);
-                            if (d < minDist) {
-                                minDist = d;
-                                nearestIndex = i;
-                            }
-                        }
-
-                        // 2페이지(시퀀스 구간)는 전용 스크립트가 터치 처리. 기본 스크롤만 막아서 페이지3로 넘어가는 것 방지
-                        if (nearestIndex === 1) {
-                            e.preventDefault();
-                            return;
-                        }
-
-                        // 브라우저 기본 스크롤 막고, 우리 로직으로만 섹션 이동
+                    // 2페이지(시퀀스 구간)는 전용 스크립트가 휠 처리. 기본 스크롤만 막아서 페이지3로 넘어가는 것 방지
+                    if (nearestIndex === 1) {
                         e.preventDefault();
+                        return;
+                    }
 
-                        if (now < scrollLockUntil) return;
+                    // 브라우저 기본 스크롤 막고, 우리 로직으로만 섹션 이동
+                    e.preventDefault();
+                    e.stopPropagation();
 
-                        let targetIndex = nearestIndex;
-                        if (dy > 0 && nearestIndex < sectionTops.length - 1) {
-                            targetIndex = nearestIndex + 1;
-                        } else if (dy < 0 && nearestIndex > 0) {
-                            targetIndex = nearestIndex - 1;
-                        } else {
-                            return;
-                        }
+                    if (now < scrollLockUntil) return;
 
-                        const targetTop = sectionTops[targetIndex];
-                        window.scrollTo({ top: targetTop, behavior: "smooth" });
-                        scrollLockUntil = now + SNAP_LOCK_MS;
-                        touchStartY = y;
-                    },
-                    { capture: true, passive: false }
-                );
+                    let targetIndex = nearestIndex;
+                    if (dy > 0 && nearestIndex < sectionTops.length - 1) {
+                        targetIndex = nearestIndex + 1;
+                    } else if (dy < 0 && nearestIndex > 0) {
+                        targetIndex = nearestIndex - 1;
+                    } else {
+                        // 더 이상 이동할 섹션이 없으면 그대로
+                        return;
+                    }
 
+                    const targetTop = sectionTops[targetIndex];
+                    window.scrollTo({ top: targetTop, behavior: "smooth" });
+                    scrollLockUntil = now + SNAP_LOCK_MS;
+                },
+                { capture: true, passive: false }
+            );
+
+            // 스크롤이 끝난 뒤 가장 가까운 섹션에 스냅 (3→2 smooth 후 과하게 올라가는 것 보정)
+            window.addEventListener("scrollend", function () {
+                if (!sectionTops.length) return;
                 updateSectionTops();
-                window.addEventListener("resize", updateSectionTops);
-            })();
-        </script>
-        <script src="./seq_script.js"></script>
-
-
-        <!-- 버블(파티클) 섹션 -->
-        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-        <script>
-            const _isMobile = window.innerWidth <= 768;
-            particlesJS("particles-js", {
-                "particles": {
-                    "number": {
-                        "value": _isMobile ? 200 : 100,
-                        "density": {
-                            "enable": true,
-                            "value_area": window.innerWidth
-                        }
-                    },
-                    "color": {
-                        "value": "#7ecdf4"
-                    },
-                    "shape": {
-                        "type": "circle",
-                        "stroke": {
-                            "width": 0,
-                            "color": "#000000"
-                        },
-                        "polygon": { "nb_sides": 5 },
-                        "image": {
-                            "src": "img/github.svg",
-                            "width": 100,
-                            "height": 100
-                        }
-                    },
-                    "opacity": {
-                        "value": 0.4887893790798144,
-                        "random": true,
-                        "anim": {
-                            "enable": false,
-                            "speed": 1,
-                            "opacity_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "size": {
-                        "value": _isMobile ? 6 : 20,
-                        "random": true,
-                        "anim": {
-                            "enable": false,
-                            "speed": 40,
-                            "size_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "line_linked": {
-                        "enable": false,
-                        "distance": 0,
-                        "color": "transparent",
-                        "opacity": 0,
-                        "width": 0
-                    },
-                    "move": {
-                        "enable": true,
-                        "speed": _isMobile ? 1 : 2,
-                        "direction": "top",
-                        "random": false,
-                        "straight": false,
-                        "out_mode": "out",
-                        "bounce": false,
-                        "attract": {
-                            "enable": false,
-                            "rotateX": 600,
-                            "rotateY": 1261.3919460124243
-                        }
+                const y = window.scrollY ?? document.documentElement.scrollTop;
+                let nearestIndex = 0;
+                let minDist = Math.abs(y - sectionTops[0]);
+                for (let i = 1; i < sectionTops.length; i++) {
+                    const d = Math.abs(y - sectionTops[i]);
+                    if (d < minDist) {
+                        minDist = d;
+                        nearestIndex = i;
                     }
-                },
-                "interactivity": {
-                    "detect_on": "canvas",
-                    "events": {
-                        "onhover": {
-                            "enable": false,
-                            "mode": "repulse"
-                        },
-                        "onclick": {
-                            "enable": true,
-                            "mode": "repulse"
-                        },
-                        "resize": true
-                    },
-                    "modes": {
-                        "repulse": {
-                            "distance": 100,
-                            "duration": 0.4
-                        },
-                        "push": { "particles_nb": 4 },
-                        "remove": { "particles_nb": 2 }
-                    }
-                },
-                "retina_detect": true
+                }
+                if (minDist > 20) {
+                    window.scrollTo({ top: sectionTops[nearestIndex], behavior: "auto" });
+                }
             });
-        </script>
+
+            var touchStartY = 0;
+            window.addEventListener(
+                "touchstart",
+                function (e) {
+                    touchStartY = e.touches[0].clientY;
+                },
+                { capture: true, passive: true }
+            );
+            window.addEventListener(
+                "touchmove",
+                function (e) {
+                    if (!sectionTops.length) return;
+                    const now = Date.now();
+                    const y = e.touches[0].clientY;
+                    const dy = touchStartY - y;
+
+                    if (Math.abs(dy) < TOUCH_THRESH) return; // 너무 미세한 스와이프는 무시
+
+                    const scrollY = window.scrollY ?? document.documentElement.scrollTop;
+                    let nearestIndex = 0;
+                    let minDist = Math.abs(scrollY - sectionTops[0]);
+                    for (let i = 1; i < sectionTops.length; i++) {
+                        const d = Math.abs(scrollY - sectionTops[i]);
+                        if (d < minDist) {
+                            minDist = d;
+                            nearestIndex = i;
+                        }
+                    }
+
+                    // 2페이지(시퀀스 구간)는 전용 스크립트가 터치 처리. 기본 스크롤만 막아서 페이지3로 넘어가는 것 방지
+                    if (nearestIndex === 1) {
+                        e.preventDefault();
+                        return;
+                    }
+
+                    // 브라우저 기본 스크롤 막고, 우리 로직으로만 섹션 이동
+                    e.preventDefault();
+
+                    if (now < scrollLockUntil) return;
+
+                    let targetIndex = nearestIndex;
+                    if (dy > 0 && nearestIndex < sectionTops.length - 1) {
+                        targetIndex = nearestIndex + 1;
+                    } else if (dy < 0 && nearestIndex > 0) {
+                        targetIndex = nearestIndex - 1;
+                    } else {
+                        return;
+                    }
+
+                    const targetTop = sectionTops[targetIndex];
+                    window.scrollTo({ top: targetTop, behavior: "smooth" });
+                    scrollLockUntil = now + SNAP_LOCK_MS;
+                    touchStartY = y;
+                },
+                { capture: true, passive: false }
+            );
+
+            updateSectionTops();
+            window.addEventListener("resize", updateSectionTops);
+        })();
+    </script>
+    <script src="./seq_script.js"></script>
+
+
+    <!-- 버블(파티클) 섹션 -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        const _isMobile = window.innerWidth <= 768;
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": _isMobile ? 200 : 100,
+                    "density": {
+                        "enable": true,
+                        "value_area": window.innerWidth
+                    }
+                },
+                "color": {
+                    "value": "#7ecdf4"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": { "nb_sides": 5 },
+                    "image": {
+                        "src": "img/github.svg",
+                        "width": 100,
+                        "height": 100
+                    }
+                },
+                "opacity": {
+                    "value": 0.4887893790798144,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": _isMobile ? 6 : 20,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": false,
+                    "distance": 0,
+                    "color": "transparent",
+                    "opacity": 0,
+                    "width": 0
+                },
+                "move": {
+                    "enable": true,
+                    "speed": _isMobile ? 1 : 2,
+                    "direction": "top",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1261.3919460124243
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": false,
+                        "mode": "repulse"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "repulse"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "repulse": {
+                        "distance": 100,
+                        "duration": 0.4
+                    },
+                    "push": { "particles_nb": 4 },
+                    "remove": { "particles_nb": 2 }
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
 </body>
 
 </html>

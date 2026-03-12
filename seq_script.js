@@ -101,9 +101,10 @@ images[0].onload = () => {
 	let isStageAnimating = false;
 	const WHEEL_THRESH = 8; // 휠 민감도 (낮을수록 작은 스크롤에도 반응)
 	const TOUCH_THRESH = 18; // 터치 한 번에 한 단계씩
-	// 뷰포트 대비 비율로 판정 (--vh/해상도에 덜 민감)
-	const ENTER_VISIBLE_RATIO = 0.65; // 화면의 65% 이상이 섹션이면 시퀀스 모드 진입
-	const EXIT_VISIBLE_RATIO = 0.45; // 45% 미만이면 이탈 (히스테리시스)
+	// 페이지2 도달 전: 일반 스크롤. 도달 후: 이미지 시퀀스.
+	const ENTER_SLOP = 25; // 2페이지가 화면 대부분 채우면 시퀀스 모드 진입 (너무 엄격하면 진입 안 함)
+	const EXIT_TOP = 70;
+	const EXIT_BOTTOM = 70;
 
 	// 텍스트: 이탈 시 빠르게 fade-out, 33/56/184 도착 직전에만 빠르게 fade-in (그 사이는 공백)
 	const TEXT_FADE_OUT_DUR = 0.12;
@@ -120,30 +121,56 @@ images[0].onload = () => {
 		if (!seqSection) return;
 		const r = seqSection.getBoundingClientRect();
 		const H = window.innerHeight;
-		// 시퀀스 섹션과 뷰포트가 겹치는 높이 (비율 기준으로 진입/이탈 판정)
-		const visibleTop = Math.max(0, r.top);
-		const visibleBottom = Math.min(H, r.bottom);
-		const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-		const visibleRatio = H > 0 ? visibleHeight / H : 0;
 		prevSeqSectionInView = seqSectionInView;
 		if (!seqSectionInView) {
-			seqSectionInView = visibleRatio >= ENTER_VISIBLE_RATIO;
+			seqSectionInView = r.top <= ENTER_SLOP && r.bottom >= H - ENTER_SLOP;
 		} else {
-			seqSectionInView = visibleRatio >= EXIT_VISIBLE_RATIO;
+			seqSectionInView = !(r.top > EXIT_TOP || r.bottom < H - EXIT_BOTTOM);
 		}
-		// 다음 페이지로 이동 시작 시 .rain-text 페이드아웃, 페이지1 복귀 시 갭 뒤 페이드인
+		// 다음 페이지로 이동 시작 시 .rain-text / .rain-text-bottom 같이 페이드아웃,
+		// 페이지1 복귀 시 같은 타이밍으로 다시 나타나게 처리
 		const rainText = document.querySelector(".rain-text");
+		const rainTextBottom = document.querySelector(".rain-text-bottom");
 		const RAIN_TEXT_FADE_IN_DELAY = 0.5; // 사라진 뒤 다시 나타나기 전 대기(초). 갭 조절
-		if (rainText) {
-			if (seqSectionInView && !prevSeqSectionInView) {
+
+		if (seqSectionInView && !prevSeqSectionInView) {
+			// 페이지2로 내려갈 때: 상단 카운트 텍스트 + 하단 카피 모두 빠르게 사라짐
+			if (rainText) {
 				gsap.to(rainText, { opacity: 0, duration: 0.12, ease: "power2.in" });
-			} else if (!seqSectionInView && prevSeqSectionInView) {
+			}
+			if (rainTextBottom) {
+				gsap.to(rainTextBottom, {
+					opacity: 0,
+					duration: 0.12,
+					ease: "power2.in",
+				});
+			}
+			// 하단 카피는 클래스도 제거해서 페이지1로 돌아올 때 다시 순차 등장
+			if (typeof hideRainBottomItems === "function") {
+				hideRainBottomItems();
+			}
+		} else if (!seqSectionInView && prevSeqSectionInView) {
+			// 페이지1로 다시 올라올 때: 상단 텍스트는 페이드인, 하단 카피는 기존과 같은 속도로 재시작
+			if (rainText) {
 				gsap.to(rainText, {
 					opacity: 1,
 					duration: 0.35,
 					delay: RAIN_TEXT_FADE_IN_DELAY,
 					ease: "power2.out",
 				});
+			}
+			if (rainTextBottom) {
+				// 컨테이너 전체도 살짝 페이드인
+				gsap.to(rainTextBottom, {
+					opacity: 1,
+					duration: 0.35,
+					delay: RAIN_TEXT_FADE_IN_DELAY,
+					ease: "power2.out",
+				});
+			}
+			// 하단 3개 카피는 클래스 기반 순차 등장 재실행
+			if (typeof showRainBottomItems === "function") {
+				showRainBottomItems(500);
 			}
 		}
 		// 000이면 일반 스크롤 허용(pan-y), 그 외 시퀀스 구간에서는 터치 가로채기(none)
@@ -351,35 +378,10 @@ images[0].onload = () => {
 		return sequence.frame >= frameCount - 1;
 	}
 
-	// 페이지3(버블 섹션)이 화면 대부분을 채우고 있는지
-	function isBubbleSectionInView() {
-		const bubble = document.getElementById("bubble-section");
-		if (!bubble) return false;
-		const r = bubble.getBoundingClientRect();
-		const H = window.innerHeight;
-		const visibleTop = Math.max(0, r.top);
-		const visibleBottom = Math.min(H, r.bottom);
-		const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-		return H > 0 && visibleHeight / H >= ENTER_VISIBLE_RATIO;
-	}
-
-	// 페이지3에서 위로 스크롤 시 페이지2로만 정확히 이동 (페이지1로 넘어가는 것 방지)
-	function scrollUpToSeqSection() {
-		if (seqSection) {
-			window.scrollTo({ top: seqSection.offsetTop, behavior: "smooth" });
-		}
-	}
-
 	// 휠: 시퀀스 구간. 시퀀스 완료 후 아래 스크롤은 일반 스크롤로 섹션3 이동.
 	function onWheel(e) {
-		const dy = e.deltaY;
-		// 페이지3에 있을 때 위로 스크롤 → 페이지2로만 이동 (과도한 위로 스크롤 방지)
-		if (!seqSectionInView && dy < -WHEEL_THRESH && isBubbleSectionInView()) {
-			e.preventDefault();
-			scrollUpToSeqSection();
-			return;
-		}
 		if (!seqSectionInView) return;
+		const dy = e.deltaY;
 		if (dy > WHEEL_THRESH) {
 			if (isSequenceComplete()) {
 				gsap.to(".sequence-text3", {
@@ -412,20 +414,11 @@ images[0].onload = () => {
 	}
 
 	function onTouchMove(e) {
+		if (!seqSectionInView) return;
 		const y = e.touches[0].clientY;
 		const delta = touchStartY - y;
 		touchStartY = y;
 		cumulativeTouch += delta;
-
-		// 페이지3에 있을 때 위로 스크롤 → 페이지2로만 이동 (과도한 위로 스크롤 방지)
-		if (!seqSectionInView) {
-			if (isBubbleSectionInView() && cumulativeTouch < -TOUCH_THRESH) {
-				e.preventDefault();
-				cumulativeTouch = 0;
-				scrollUpToSeqSection();
-			}
-			return;
-		}
 
 		if (cumulativeTouch > TOUCH_THRESH) {
 			cumulativeTouch = 0;
