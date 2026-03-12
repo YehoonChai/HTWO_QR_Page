@@ -192,6 +192,10 @@ body {
 	word-break: keep-all;
 	overflow-wrap: break-word;
 }
+
+.nowrap {
+	white-space: nowrap;
+}
 /* 모바일 */
 @media (max-width: 768px) {
 	.rain-text {
