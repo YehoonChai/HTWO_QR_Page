@@ -56,6 +56,16 @@ body {
 	object-fit: contain;
 }
 
+/* 다크모드에서도 제목/본문 색 유지 (브라우저 색 덮어쓰기 방지) */
+.seq-section .sequence-text1,
+.seq-section .sequence-text2,
+.seq-section .sequence-text3 {
+	color-scheme: light;
+	forced-color-adjust: none;
+	-webkit-forced-color-adjust: none;
+	color: #000000;
+}
+
 .seq-section .sequence-text1 {
 	position: absolute;
 	width: 90%;
@@ -98,18 +108,26 @@ body {
 	flex-direction: column;
 }
 
-.seq-section h1 {
+.seq-section .sequence-text1 h1,
+.seq-section .sequence-text2 h1,
+.seq-section .sequence-text3 h1 {
 	font-size: 2rem;
 	font-weight: 700;
 	margin-bottom: 1rem;
 	text-align: center;
 	color: #000000;
+	forced-color-adjust: none;
+	-webkit-forced-color-adjust: none;
 }
 
-.seq-section p {
+.seq-section .sequence-text1 p,
+.seq-section .sequence-text2 p,
+.seq-section .sequence-text3 p {
 	font-size: 1rem;
 	font-weight: 400;
 	margin-bottom: 1rem;
 	text-align: center;
-	color: #888888;
+	color: #555555;
+	forced-color-adjust: none;
+	-webkit-forced-color-adjust: none;
 }

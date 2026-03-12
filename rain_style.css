@@ -26,12 +26,18 @@ rain-text rain-text rain-text rain-text@font-face {
 	padding: 0;
 }
 
+html {
+	color-scheme: light;
+	background-color: #ffffff;
+}
+
 html,
 body {
 	-webkit-text-size-adjust: 100%;
 	text-size-adjust: 100%;
 	font-family: "HyundaiSansTextPro", "Malgun Gothic", sans-serif;
 	overflow-x: hidden;
+	background-color: #ffffff;
 }
 
 .page {
